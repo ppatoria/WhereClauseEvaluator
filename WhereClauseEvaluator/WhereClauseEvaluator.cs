@@ -14,31 +14,22 @@ namespace SqlUtil
     {
         string GetValue(string columnName);
     }
-    public class WhereClauseEvaluator<T> where T : IRecord
+    public class WhereClauseParser
     {
-        private readonly string _whereClause;
-        private readonly T _record;
-
-        public WhereClauseEvaluator(string whereClause, T recored)
-        {
-            _whereClause = whereClause;
-            _record = recored;
-        }
-
-        public bool Evaluate()
+        public static bool Evaluate<T>(string whereClause, T record) where T:IRecord
         {
             IList<ParseError> errors = null;
             var whereExpression = new TSql100Parser(false)
-                .ParseBooleanExpression(new StringReader(_whereClause),
+                .ParseBooleanExpression(new StringReader(whereClause),
                 out errors);
             if(errors != null && errors.Any())
             {
                 throw new Exception($"Error {errors} while parsing");
             }
-            return Evaluate(whereExpression);
+            return Evaluate(whereExpression, record);
         }
 
-        private bool Evaluate(BooleanExpression expression)
+        private static bool Evaluate<T>(BooleanExpression expression, T record ) where T:IRecord
         {
             if (expression is BooleanBinaryExpression)
             {
@@ -46,13 +37,13 @@ namespace SqlUtil
                 switch (expr.BinaryExpressionType)
                 {
                     case BooleanBinaryExpressionType.And:
-                        return Evaluate(expr.FirstExpression)
+                        return Evaluate(expr.FirstExpression, record)
                             &&
-                            Evaluate(expr.SecondExpression);
+                            Evaluate(expr.SecondExpression, record);
                     case BooleanBinaryExpressionType.Or:
-                        return Evaluate(expr.FirstExpression)
+                        return Evaluate(expr.FirstExpression, record)
                             ||
-                            Evaluate(expr.SecondExpression);
+                            Evaluate(expr.SecondExpression, record);
                 }
             }
 
@@ -60,7 +51,7 @@ namespace SqlUtil
             {
                 var expr = (BooleanComparisonExpression)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = _record.GetValue(pair.Key);
+                var lhs = record.GetValue(pair.Key);
                 var rhs = pair.Value;
 
                 switch(expr.ComparisonType)
@@ -87,14 +78,14 @@ namespace SqlUtil
             if(expression is BooleanParenthesisExpression)
             {
                 var expr = (BooleanParenthesisExpression)expression;
-                return Evaluate(expr.Expression);
+                return Evaluate(expr.Expression, record);
             }
 
             if(expression is LikePredicate)
             {
                 var expr = (LikePredicate)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = _record.GetValue(pair.Key);
+                var lhs = record.GetValue(pair.Key);
                 var rhs = pair.Value;
                 rhs = rhs.Replace("%", ".*");
                 return Regex.IsMatch(lhs, rhs);                
@@ -104,7 +95,7 @@ namespace SqlUtil
             {
                 var expr = (InPredicate)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = _record.GetValue(pair.Key);
+                var lhs = record.GetValue(pair.Key);
                 var rhs = pair.Value;
                 var x = pair.Value[0];
                 return rhs.Any(e => ((Literal)e).Value == lhs);
