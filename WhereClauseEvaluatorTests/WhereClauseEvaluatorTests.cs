@@ -24,6 +24,8 @@ namespace WhereClauseEvaluatorTests
         [TestCase("c like 0", ExpectedResult = true)]
         [TestCase("c like '%0%'", ExpectedResult = true)]
         [TestCase("c in (0,1,2)", ExpectedResult = true)]
+        [TestCase("c in (1,2)", ExpectedResult = false)]
+        [TestCase("((c in (1,2) or c2=2) and (c=1 or c like '0')) or c1=0", ExpectedResult = true)]
         public bool EvaluateCorrectly(string whereClause)
         {
             return new WhereClauseEvaluator<IRecord>(whereClause, _mockRecord.Object)

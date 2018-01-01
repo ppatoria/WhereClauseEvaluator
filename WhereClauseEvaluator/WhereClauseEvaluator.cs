@@ -42,7 +42,7 @@ namespace SqlUtil
         {
             if (expression is BooleanBinaryExpression)
             {
-                var expr = expression as BooleanBinaryExpression;
+                var expr = (BooleanBinaryExpression)expression;
                 switch (expr.BinaryExpressionType)
                 {
                     case BooleanBinaryExpressionType.And:
@@ -62,11 +62,25 @@ namespace SqlUtil
                 var pair = GetKeyValue(expr);
                 var lhs = _record.GetValue(pair.Key);
                 var rhs = pair.Value;
+
                 switch(expr.ComparisonType)
                 {
-                    // TODO implement all the comparision operators
                     case BooleanComparisonType.Equals:
                         return lhs == rhs;
+                    case BooleanComparisonType.NotEqualToExclamation:
+                        return lhs != rhs;
+                    case BooleanComparisonType.GreaterThan:
+                        return Double.Parse(lhs) > Double.Parse(rhs);
+                    case BooleanComparisonType.LessThan:
+                        return Double.Parse(lhs) < Double.Parse(rhs);
+                    case BooleanComparisonType.GreaterThanOrEqualTo:
+                        return Double.Parse(lhs) >= Double.Parse(rhs);
+                    case BooleanComparisonType.LessThanOrEqualTo:
+                        return Double.Parse(lhs) <= Double.Parse(rhs);
+                    case BooleanComparisonType.NotEqualToBrackets:
+                        return Double.Parse(lhs) > Double.Parse(rhs);
+                    default:
+                        throw new NotImplementedException("${expr.ComparisonType} not implemented");
                 }
             }
 
