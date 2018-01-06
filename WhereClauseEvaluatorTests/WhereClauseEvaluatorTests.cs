@@ -1,6 +1,9 @@
 ﻿using NUnit.Framework;
 using SqlUtil;
 using Moq;
+using System.Diagnostics;
+using System.Linq.Expressions;
+using System;
 
 namespace WhereClauseEvaluatorTests
 {
@@ -26,9 +29,12 @@ namespace WhereClauseEvaluatorTests
         [TestCase("c in (0,1,2)", ExpectedResult = true)]
         [TestCase("c in (1,2)", ExpectedResult = false)]
         [TestCase("((c in (1,2) or c2=2) and (c=1 or c like '0')) or c1=0", ExpectedResult = true)]
+        [TestCase("not (c in (1, 2))", ExpectedResult = true)]
         public bool EvaluateCorrectly(string whereClause)
         {
-            return WhereClauseParser.Evaluate(whereClause, _mockRecord.Object);
+            var whereExpression = whereClause.ToExpression(_mockRecord.Object);
+            Debug.WriteLine($"{whereClause} =>\n {whereExpression}");
+            return Expression.Lambda<Func<bool>>(whereExpression).Compile()();
         }
     }
 }

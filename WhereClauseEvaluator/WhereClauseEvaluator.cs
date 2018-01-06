@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Text.RegularExpressions;
+using System.Linq.Expressions;
 
 namespace SqlUtil
 {
@@ -14,9 +15,9 @@ namespace SqlUtil
     {
         string GetValue(string columnName);
     }
-    public class WhereClauseParser
+    public static class WhereClauseParser
     {
-        public static bool Evaluate<T>(string whereClause, T record) where T:IRecord
+        public static Expression ToExpression<T>(this string whereClause, T record) where T:IRecord
         {
             IList<ParseError> errors = null;
             var whereExpression = new TSql100Parser(false)
@@ -26,10 +27,10 @@ namespace SqlUtil
             {
                 throw new Exception($"Error {errors} while parsing");
             }
-            return Evaluate(whereExpression, record);
+            return ToExpression(whereExpression, record);
         }
 
-        private static bool Evaluate<T>(BooleanExpression expression, T record ) where T:IRecord
+        private static Expression ToExpression<T>(BooleanExpression expression, T record ) where T:IRecord
         {
             if (expression is BooleanBinaryExpression)
             {
@@ -37,13 +38,13 @@ namespace SqlUtil
                 switch (expr.BinaryExpressionType)
                 {
                     case BooleanBinaryExpressionType.And:
-                        return Evaluate(expr.FirstExpression, record)
-                            &&
-                            Evaluate(expr.SecondExpression, record);
+                        return Expression.And(
+                            ToExpression(expr.FirstExpression, record),
+                            ToExpression(expr.SecondExpression, record));
                     case BooleanBinaryExpressionType.Or:
-                        return Evaluate(expr.FirstExpression, record)
-                            ||
-                            Evaluate(expr.SecondExpression, record);
+                        return Expression.Or(
+                            ToExpression<T>(expr.FirstExpression, record),
+                            ToExpression(expr.SecondExpression, record));
                 }
             }
 
@@ -57,19 +58,29 @@ namespace SqlUtil
                 switch(expr.ComparisonType)
                 {
                     case BooleanComparisonType.Equals:
-                        return lhs == rhs;
+                        return Expression.Equal(
+                            Expression.Constant(lhs),
+                            Expression.Constant(rhs));
                     case BooleanComparisonType.NotEqualToExclamation:
-                        return lhs != rhs;
+                        return Expression.NotEqual(
+                            Expression.Constant(lhs),
+                            Expression.Constant(rhs));
                     case BooleanComparisonType.GreaterThan:
-                        return Double.Parse(lhs) > Double.Parse(rhs);
+                        return Expression.GreaterThan(
+                            Expression.Constant(lhs),
+                            Expression.Constant(rhs));
                     case BooleanComparisonType.LessThan:
-                        return Double.Parse(lhs) < Double.Parse(rhs);
+                        return Expression.LessThan(
+                            Expression.Constant(lhs),
+                            Expression.Constant(rhs));
                     case BooleanComparisonType.GreaterThanOrEqualTo:
-                        return Double.Parse(lhs) >= Double.Parse(rhs);
+                        return Expression.GreaterThanOrEqual(
+                            Expression.Constant(lhs),
+                            Expression.Constant(rhs));
                     case BooleanComparisonType.LessThanOrEqualTo:
-                        return Double.Parse(lhs) <= Double.Parse(rhs);
-                    case BooleanComparisonType.NotEqualToBrackets:
-                        return Double.Parse(lhs) > Double.Parse(rhs);
+                        return Expression.LessThanOrEqual(
+                            Expression.Constant(lhs),
+                            Expression.Constant(rhs));
                     default:
                         throw new NotImplementedException("${expr.ComparisonType} not implemented");
                 }
@@ -78,7 +89,7 @@ namespace SqlUtil
             if(expression is BooleanParenthesisExpression)
             {
                 var expr = (BooleanParenthesisExpression)expression;
-                return Evaluate(expr.Expression, record);
+                return ToExpression(expr.Expression, record);
             }
 
             if(expression is LikePredicate)
@@ -88,7 +99,11 @@ namespace SqlUtil
                 var lhs = record.GetValue(pair.Key);
                 var rhs = pair.Value;
                 rhs = rhs.Replace("%", ".*");
-                return Regex.IsMatch(lhs, rhs);                
+                var re = new Regex(rhs);
+                return Expression.Call(
+                    Expression.Constant(re),
+                    (typeof(Regex)).GetMethod("IsMatch", new Type[] { typeof(string) }),
+                    Expression.Constant(lhs));
             }
 
             if(expression is InPredicate)
@@ -96,9 +111,17 @@ namespace SqlUtil
                 var expr = (InPredicate)expression;
                 var pair = GetKeyValue(expr);
                 var lhs = record.GetValue(pair.Key);
-                var rhs = pair.Value;
-                var x = pair.Value[0];
-                return rhs.Any(e => ((Literal)e).Value == lhs);
+                var rhs = pair.Value.Select(e => ((Literal)e).Value).ToList();
+                return Expression.Call(
+                    Expression.Constant(rhs),
+                    (typeof(List<string>)).GetMethod("Contains", new Type[] { typeof(string) }),
+                    Expression.Constant(lhs));
+            }
+
+            if(expression is BooleanNotExpression)
+            {
+                var expr = (BooleanNotExpression)expression;
+                return Expression.Not(ToExpression(expr.Expression, record));
             }
 
             throw new InvalidExpressionException($"{expression} not supported");
