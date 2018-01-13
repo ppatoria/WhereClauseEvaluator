@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereClauseEvaluatorTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryTree", "BinaryTree\BinaryTree.csproj", "{E605B8BC-B1F8-4957-AF1D-672A6860CC48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionParser", "ExpressionParser\ExpressionParser.csproj", "{47B6487C-8693-46DA-AC0C-F0400C35E067}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E605B8BC-B1F8-4957-AF1D-672A6860CC48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E605B8BC-B1F8-4957-AF1D-672A6860CC48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E605B8BC-B1F8-4957-AF1D-672A6860CC48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47B6487C-8693-46DA-AC0C-F0400C35E067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47B6487C-8693-46DA-AC0C-F0400C35E067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47B6487C-8693-46DA-AC0C-F0400C35E067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47B6487C-8693-46DA-AC0C-F0400C35E067}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

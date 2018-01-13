@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -60,6 +62,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExpressionParser\ExpressionParser.csproj">
+      <Project>{47b6487c-8693-46da-ac0c-f0400c35e067}</Project>
+      <Name>ExpressionParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WhereClauseEvaluator\WhereClauseEvaluator.csproj">
       <Project>{3ba8739f-d038-4f9c-b993-4f79ce4ca0fd}</Project>
       <Name>WhereClauseEvaluator</Name>
