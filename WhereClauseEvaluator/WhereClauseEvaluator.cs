@@ -11,6 +11,18 @@ using System.Linq.Expressions;
 
 namespace SqlUtil
 {
+    public static class SqlOperations
+    {
+        public static bool Like(this ColumnOperand lhs, ConstantOperand rhs)
+        {
+            return Regex.IsMatch(lhs.Data.Value, (rhs.Data.Replace("%", ".*")));
+        }
+
+        public static bool In(this ColumnOperand lhs, ConstantOperandOfList rhs)
+        {
+            return rhs.Data.Contains(lhs.Data.Value);
+        }
+    }
     public interface IRecord
     {
         string GetValue(string columnName);
@@ -72,50 +84,36 @@ namespace SqlUtil
 
             if(expression is BooleanComparisonExpression)
             {
-                Expression resultExpr;
                 var expr = (BooleanComparisonExpression)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = new Field (pair.Key,record.GetValue(pair.Key));
-                var rhs = new Field (pair.Value);
+                var lhs = new ColumnOperand (pair.Key,record.GetValue(pair.Key));
+                var rhs = new ConstantOperand(pair.Value);
                 switch(expr.ComparisonType)
                 {
                     case BooleanComparisonType.Equals:
-                        resultExpr  =  Expression.Equal(
+                        return  Expression.Equal(
                             Expression.Constant(lhs),
                             Expression.Constant(rhs));
-                        var result = string.Format($"{lhs}={rhs} => [{Evaluate(resultExpr)}]");
-                        LastResult.Add(result);
-                        return resultExpr;
                     case BooleanComparisonType.NotEqualToExclamation:
-                        resultExpr =  Expression.NotEqual(
+                        return Expression.NotEqual(
                             Expression.Constant(lhs),
                             Expression.Constant(rhs));
-                        LastResult.Add($"{lhs}!={rhs} => [{Expression.Lambda<Func<bool>>(resultExpr).Compile()()}]");
-                        return resultExpr;
                     case BooleanComparisonType.GreaterThan:
-                        resultExpr = Expression.GreaterThan(
+                        return Expression.GreaterThan(
                             Expression.Constant(lhs),
                             Expression.Constant(rhs));
-                        LastResult.Add($"{lhs}>{rhs} => [{Expression.Lambda<Func<bool>>(resultExpr).Compile()()}]");
-                        return resultExpr;
                     case BooleanComparisonType.LessThan:
-                        resultExpr = Expression.LessThan(
+                        return Expression.LessThan(
                             Expression.Constant(lhs),
                             Expression.Constant(rhs));
-                        LastResult.Add($"{lhs}<{rhs} => [{Expression.Lambda<Func<bool>>(resultExpr).Compile()()}]");
-                        return resultExpr;
                     case BooleanComparisonType.GreaterThanOrEqualTo:
-                        resultExpr = Expression.GreaterThanOrEqual(
+                        return Expression.GreaterThanOrEqual(
                             Expression.Constant(lhs),
                             Expression.Constant(rhs));
-                        LastResult.Add($"{lhs}>={rhs} => [{Expression.Lambda<Func<bool>>(resultExpr).Compile()()}]");
-                        return resultExpr;
                     case BooleanComparisonType.LessThanOrEqualTo:
-                        resultExpr = Expression.LessThanOrEqual(
+                        return Expression.LessThanOrEqual(
                             Expression.Constant(lhs),
                             Expression.Constant(rhs));
-                        LastResult.Add($"{lhs}<={rhs} => [{Expression.Lambda<Func<bool>>(resultExpr).Compile()()}]");
-                        return resultExpr;
                     default:
                         throw new NotImplementedException("${expr.ComparisonType} not implemented");
                 }
@@ -131,36 +129,33 @@ namespace SqlUtil
             {
                 var expr = (LikePredicate)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = new Field (pair.Key,record.GetValue(pair.Key));
-                var rhs = new Field (pair.Value);
-                rhs = rhs.Value.Replace("%", ".*");
-                var re = new Regex(rhs);
-                var resultExpr = Expression.Call(
-                    Expression.Constant(re),
-                    (typeof(Regex)).GetMethod("IsMatch", new Type[] { typeof(string) }),
-                    Expression.Constant(lhs));
-                LastResult.Add($"{lhs} LIKE {rhs} => [{Expression.Lambda<Func<bool>>(resultExpr).Compile()()}]");
-                return resultExpr;
+                var lhs = new ColumnOperand (pair.Key,record.GetValue(pair.Key));
+                var rhs = new ConstantOperand (pair.Value);
+
+                return Expression.Call(
+                    null,
+                    typeof(SqlOperations).GetMethod("Like"),
+                    Expression.Constant(lhs),
+                    Expression.Constant(rhs));
             }
 
             if(expression is InPredicate)
             {
                 var expr = (InPredicate)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = new Field (pair.Key,record.GetValue(pair.Key));
-                var rhs = pair.Value.Select(e => ((Literal)e).Value).ToList();
-                var resultExpr = Expression.Call(
-                    Expression.Constant(rhs),
-                    (typeof(List<string>)).GetMethod("Contains", new Type[] { typeof(string) }),
-                    Expression.Constant(lhs));
-                LastResult.Add($"{lhs} IN({string.Join(",", rhs)}) => [{Expression.Lambda<Func<bool>>(resultExpr).Compile()()}]");
-                return resultExpr;
+                var lhs = new ColumnOperand (pair.Key,record.GetValue(pair.Key));
+                var rhs = new ConstantOperandOfList(pair.Value.Select(e => ((Literal)e).Value).ToList());
+
+                return Expression.Call(
+                    null,
+                    typeof(SqlOperations).GetMethod("In"),
+                    Expression.Constant(lhs),
+                    Expression.Constant(rhs));
             }
 
             if(expression is BooleanNotExpression)
             {
                 var expr = (BooleanNotExpression)expression;
-                LastResult.Add("NOT");
                 return Expression.Not(ToExpression(expr.Expression, record));
             }
 

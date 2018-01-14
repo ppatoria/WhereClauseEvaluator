@@ -3,25 +3,77 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Collections.Generic;
 namespace SqlUtil
 {
-    public class Field : IEquatable<string>
+    public enum NodeType
     {
-        public Field(string name, string value)
+        ColumnOperand,
+        ConstantOperand,
+        BinaryOperator,
+        UnaryOperator
+    };
+
+    public interface INodeInfo<T>
+    {
+        NodeType NodeType { get; }
+        T Data { get; }
+    }
+    public class BinaryOperator : INodeInfo<string>
+    {
+        public BinaryOperator(string value)
         {
-            Name = name;
-            Value = value;
+            Data = value;
+        }
+        public NodeType NodeType => NodeType.BinaryOperator;
+
+        public string Data { get; }
+    }
+    public class UnaryOperator : INodeInfo<string>
+    {
+        public UnaryOperator(string value)
+        {
+            Data = value;
+        }
+        public NodeType NodeType => NodeType.UnaryOperator;
+
+        public string Data { get; }
+    }
+
+    public class ConstantOperand : INodeInfo<string>
+    {
+        public ConstantOperand(string value)
+        {
+            Data = value;
+        }
+        public NodeType NodeType => NodeType.ConstantOperand;
+
+        public string Data { get; }
+    }
+    public class ConstantOperandOfList : INodeInfo<IList<string>>
+    {
+        public ConstantOperandOfList(IList<string> value)
+        {
+            Data = value;
+        }
+        public NodeType NodeType => NodeType.ConstantOperand;
+
+        public IList<string> Data { get; }
+    }
+
+    public class ColumnOperand : IEquatable<ConstantOperand>, INodeInfo<KeyValuePair<string,string>>
+    {
+        
+        public ColumnOperand(string name, string value)
+        {
+            Data = new KeyValuePair<string, string>(name, value);
         }
 
-        public Field(string value)
-        {
-            Name = string.Empty;
-            Value = value;
-        }
 
-        public string Name { get; }
-        public string Value { get; }
+        public KeyValuePair<string,string> Data { get; set; }
+
+        public NodeType NodeType =>  NodeType.ColumnOperand;
+
 
         public override int GetHashCode()
         {
@@ -29,100 +81,60 @@ namespace SqlUtil
         }
         public override bool Equals(object other)
         {
-            return Value.Equals(other);
+            return Data.Equals(other);
         }
-        public bool Equals(string other)
+        public bool Equals(ConstantOperand other)
         {
-            return Value.Equals(other);
-        }
-        public bool Equals(Field other)
-        {
-            return Value.Equals(other.Value);
+            return Data.Value.Equals(other.Data);
         }
 
-        public static bool operator ==(Field lhs, string rhs)
+        public static bool operator ==(ColumnOperand lhs, ConstantOperand rhs)
         {
             return lhs.Equals(rhs);
         }
-        public static bool operator ==(Field lhs, Field rhs)
-        {
-            return lhs.Equals(rhs);
-        }
-        public static bool operator !=(Field lhs, string rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
-        public static bool operator !=(Field lhs, Field rhs)
+        public static bool operator !=(ColumnOperand lhs, ConstantOperand rhs)
         {
             return !lhs.Equals(rhs);
         }
 
-        public static bool operator >(Field lhs, string rhs)
+        public static bool operator >(ColumnOperand lhs, ConstantOperand rhs)
         {
             return
-                double.Parse(lhs.Value)
+                double.Parse(lhs.Data.Value)
                 >
-                double.Parse(rhs);
+                double.Parse(rhs.Data);
         }
-        public static bool operator >(Field lhs, Field rhs)
+        public static bool operator <(ColumnOperand lhs, ConstantOperand rhs)
         {
             return
-                double.Parse(lhs.Value)
-                >
-                double.Parse(rhs.Value);
-        }
-        public static bool operator <(Field lhs, string rhs)
-        {
-            return
-                double.Parse(lhs.Value)
+                double.Parse(lhs.Data.Value)
                 <
-                double.Parse(rhs);
-        }
-        public static bool operator <(Field lhs, Field rhs)
-        {
-            return
-                double.Parse(lhs.Value)
-                <
-                double.Parse(rhs.Value);
+                double.Parse(rhs.Data);
         }
 
-        public static bool operator <=(Field lhs, string rhs)
+        public static bool operator <=(ColumnOperand lhs, ConstantOperand rhs)
         {
             return
-                double.Parse(lhs.Value)
+                double.Parse(lhs.Data.Value)
                 <=
-                double.Parse(rhs);
+                double.Parse(rhs.Data);
         }
-        public static bool operator <=(Field lhs, Field rhs)
+        public static bool operator >=(ColumnOperand lhs, ConstantOperand rhs)
         {
             return
-                double.Parse(lhs.Value)
-                <=
-                double.Parse(rhs.Value);
-        }
-        public static bool operator >=(Field lhs, string rhs)
-        {
-            return
-                double.Parse(lhs.Value)
+                double.Parse(lhs.Data.Value)
                 >=
-                double.Parse(rhs);
-        }
-        public static bool operator >=(Field lhs, Field rhs)
-        {
-            return
-                double.Parse(lhs.Value)
-                >=
-                double.Parse(rhs.Value);
+                double.Parse(rhs.Data);
         }
 
-        public static implicit operator string(Field field)
+        public static implicit operator string(ColumnOperand field)
         {
-            return field.Value;
+            return field.Data.Value;
         }
 
-        public static implicit operator Field(string value)
+        public static implicit operator ColumnOperand(string value)
         {
-            return new Field(string.Empty,value);
+            return new ColumnOperand(string.Empty,value);
         }
     }
 

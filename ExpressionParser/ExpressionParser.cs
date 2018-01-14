@@ -10,11 +10,11 @@ namespace ExpressionParser
 {
     public class ExpressionParser : ExpressionVisitor
     {
-        public List<string> PrefixExpression { get; }
+        public List<object> PrefixExpression { get; }
 
         public ExpressionParser(Expression expression)
         {
-            PrefixExpression = new List<string>();
+            PrefixExpression = new List<object>();
             Parse(expression);
         }
 
@@ -36,44 +36,30 @@ namespace ExpressionParser
             if (node is BinaryExpression)
             {
                 var bnode = (BinaryExpression)node;
-                PrefixExpression.Add(node.NodeType.ToString());
+                PrefixExpression.Add(new BinaryOperator(node.NodeType.ToString()));
                 Parse(bnode.Left);
                 Parse(bnode.Right);
             }
             if(node is ConditionalExpression)
             {
                 var cnode = (ConditionalExpression)node;
-                PrefixExpression.Add(node.NodeType.ToString());
+                PrefixExpression.Add( new BinaryOperator(node.NodeType.ToString()));
             }
             if(node is ConstantExpression)
             {
                 var cnode = (ConstantExpression)node;
-                PrefixExpression.Add(node.ToString());
+                PrefixExpression.Add(cnode.Value);
             }
             if(node is MethodCallExpression)
             {
                 var mnode = (MethodCallExpression)node;
-                PrefixExpression.Add(mnode.Method.Name);
+                PrefixExpression.Add(new BinaryOperator(mnode.Method.Name));
 
                 foreach(var arg in mnode.Arguments)
                 {
                     var argValue = ((ConstantExpression)arg).Value;
-                    if (argValue is Field)
-                    {
-                        var field = (Field)argValue;
-                        PrefixExpression.Add($"{field.Name}[{field.Value}]");
-                    }
-                    else if(argValue is IList<string>)
-                    {
-                        var values = string.Join(",", (IList<string>)argValue);
-                        PrefixExpression.Add($"({values})");
-                    }
-                    else
-                    {
-                        PrefixExpression.Add(argValue.ToString());
-                    }
+                    PrefixExpression.Add(argValue);
                 }
-
 
                 if (mnode.Object != null)
                 {
