@@ -64,6 +64,7 @@ namespace WhereClauseEvaluatorTests
                 &&
                 field >= constOperand;
         }
+
         [TestCase("field1", "11", "10", ExpectedResult = false)]
         [TestCase("field1", "10", "10", ExpectedResult = true)]
         [TestCase("field1", "10", "11", ExpectedResult = true)]
