@@ -26,8 +26,6 @@ namespace SqlUtil
     public class WhereClauseParser
     {
         public List<string> LastResult { get; }
-        Node<string> node_ = null;
-        private static int level_ = 0;
         private BooleanExpression expression_;
         public WhereClauseParser(string whereClause)
         {
@@ -56,7 +54,6 @@ namespace SqlUtil
         {
             if (expression is BooleanBinaryExpression)
             {
-                Expression resultExpr;
                 var expr = (BooleanBinaryExpression)expression;
                 switch (expr.BinaryExpressionType)
                 {
@@ -78,8 +75,8 @@ namespace SqlUtil
                 Expression resultExpr;
                 var expr = (BooleanComparisonExpression)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = record.GetValue(pair.Key);
-                var rhs = pair.Value;
+                var lhs = new Field (pair.Key,record.GetValue(pair.Key));
+                var rhs = new Field (pair.Value);
                 switch(expr.ComparisonType)
                 {
                     case BooleanComparisonType.Equals:
@@ -127,7 +124,6 @@ namespace SqlUtil
             if(expression is BooleanParenthesisExpression)
             {
                 var expr = (BooleanParenthesisExpression)expression;
-                //sb_.Append($"{expr.ScriptTokenStream[0].Text}\n");
                 return ToExpression(expr.Expression, record);
             }
 
@@ -135,9 +131,9 @@ namespace SqlUtil
             {
                 var expr = (LikePredicate)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = record.GetValue(pair.Key);
-                var rhs = pair.Value;
-                rhs = rhs.Replace("%", ".*");
+                var lhs = new Field (pair.Key,record.GetValue(pair.Key));
+                var rhs = new Field (pair.Value);
+                rhs = rhs.Value.Replace("%", ".*");
                 var re = new Regex(rhs);
                 var resultExpr = Expression.Call(
                     Expression.Constant(re),
@@ -151,7 +147,7 @@ namespace SqlUtil
             {
                 var expr = (InPredicate)expression;
                 var pair = GetKeyValue(expr);
-                var lhs = record.GetValue(pair.Key);
+                var lhs = new Field (pair.Key,record.GetValue(pair.Key));
                 var rhs = pair.Value.Select(e => ((Literal)e).Value).ToList();
                 var resultExpr = Expression.Call(
                     Expression.Constant(rhs),

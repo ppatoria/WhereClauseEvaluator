@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using SqlUtil;
 namespace ExpressionParser
 {
     public class ExpressionParser : ExpressionVisitor
@@ -55,12 +55,31 @@ namespace ExpressionParser
                 var mnode = (MethodCallExpression)node;
                 PrefixExpression.Add(mnode.Method.Name);
 
-                var arguments = string.Join(",", mnode.Arguments.Select(a => a.ToString()));
-                PrefixExpression.Add(arguments);
+                foreach(var arg in mnode.Arguments)
+                {
+                    var argValue = ((ConstantExpression)arg).Value;
+                    if (argValue is Field)
+                    {
+                        var field = (Field)argValue;
+                        PrefixExpression.Add($"{field.Name}[{field.Value}]");
+                    }
+                    else if(argValue is IList<string>)
+                    {
+                        var values = string.Join(",", (IList<string>)argValue);
+                        PrefixExpression.Add($"({values})");
+                    }
+                    else
+                    {
+                        PrefixExpression.Add(argValue.ToString());
+                    }
+                }
 
-                var Object = ParseObject(((ConstantExpression)mnode.Object).Value);
-                
-                PrefixExpression.Add(Object);
+
+                if (mnode.Object != null)
+                {
+                    var Object = ParseObject(((ConstantExpression)mnode.Object).Value);
+                    PrefixExpression.Add(Object);
+                }
             }
         }
 

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
-using WhereClauseEvaluator;
+using SqlUtil;
 
 namespace WhereClauseEvaluatorTests
 {
@@ -67,6 +71,50 @@ namespace WhereClauseEvaluatorTests
                 Expression.Lambda<Func<bool>>(expr).Compile()()
                 &&
                 field <= constValue;
+        }
+
+        [TestCase(ExpectedResult = true)]
+        public bool EvaluateLikeOperation()
+        {
+            var comparer = Expression.Call(
+                null,
+                typeof(SqlOperations).GetMethod("Like"),
+                Expression.Constant(new Field("field","Me")),
+                Expression.Constant("M%"));
+            Debug.WriteLine(comparer);
+            var e = new ExpressionParser.ExpressionParser(comparer).PrefixExpression;
+            Assert.That(string.Join(",", e), Is.EqualTo("Like,field[Me],M%"));
+            return Expression.Lambda<Func<bool>>(comparer).Compile()();
+        }
+
+        [TestCase(ExpectedResult = true)]
+        public bool EvaluateInOperation()
+        {
+            var comparer = Expression.Call(
+                null,
+                typeof(SqlOperations).GetMethod("In"),
+                Expression.Constant(new Field("field","1")),
+                Expression.Constant(new List<string> { "1","2","3"}));
+
+            Debug.WriteLine(comparer);
+
+            var e = new ExpressionParser.ExpressionParser(comparer).PrefixExpression;
+
+            Assert.That(string.Join(",", e), Is.EqualTo("In,field[1],(1,2,3)"));
+
+            return Expression.Lambda<Func<bool>>(comparer).Compile()();
+        }
+    }
+    public static class SqlOperations
+    {
+        public static bool Like(this Field lhs, string rhs)
+        {
+            return Regex.IsMatch(lhs.Value, (rhs.Replace("%", ".*")));
+        }
+
+        public static bool In(this Field lhs, IList<string> rhs)
+        {
+            return rhs.Contains(lhs.Value);
         }
     }
 }
