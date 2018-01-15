@@ -41,6 +41,7 @@ namespace WhereClauseEvaluatorTests
         }
 
         [TestCase("((c in (1,2) or c2=2) and (c=1 or c like '0')) or c1=0")]
+        [TestCase("not (c in (1, 2))")]
         public void Should_Parse_And_Return_PrefixExpression(string whereClause)
         {
             var parser = new WhereClauseParser(whereClause);

@@ -28,6 +28,7 @@ namespace SqlUtil
         public NodeType NodeType => NodeType.BinaryOperator;
 
         public string Data { get; }
+        public bool Result { get; set; }
     }
     public class UnaryOperator : INodeInfo<string>
     {
@@ -38,6 +39,7 @@ namespace SqlUtil
         public NodeType NodeType => NodeType.UnaryOperator;
 
         public string Data { get; }
+        public bool Result { get; set; }
     }
 
     public class ConstantOperand : INodeInfo<string>

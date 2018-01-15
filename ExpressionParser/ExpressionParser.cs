@@ -36,14 +36,28 @@ namespace ExpressionParser
             if (node is BinaryExpression)
             {
                 var bnode = (BinaryExpression)node;
-                PrefixExpression.Add(new BinaryOperator(node.NodeType.ToString()));
+                var op = new BinaryOperator(bnode.NodeType.ToString());
+                op.Result = Expression.Lambda<Func<bool>>(bnode).Compile()();
+
+                PrefixExpression.Add(op);
                 Parse(bnode.Left);
                 Parse(bnode.Right);
             }
+
+            if(node is UnaryExpression)
+            {
+                var unode = (UnaryExpression)node;
+                var op = new UnaryOperator(unode.NodeType.ToString());
+                op.Result = Expression.Lambda<Func<bool>>(unode).Compile()();
+
+                PrefixExpression.Add(op);
+                Parse(unode.Operand);
+            }
+
             if(node is ConditionalExpression)
             {
                 var cnode = (ConditionalExpression)node;
-                PrefixExpression.Add( new BinaryOperator(node.NodeType.ToString()));
+                PrefixExpression.Add( new BinaryOperator(cnode.NodeType.ToString()));
             }
             if(node is ConstantExpression)
             {
@@ -68,145 +82,5 @@ namespace ExpressionParser
                 }
             }
         }
-
-        //public override Expression Visit(Expression node)
-        //{
-        //    PrefixExpression.Add(node.NodeType.ToString());
-        //    return Visit(node);
-        //}
-
-        protected override Expression VisitBinary(BinaryExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            Visit(node.Left);
-            Visit(node.Right);
-            return null;
-        }
-        protected override Expression VisitBlock(BlockExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitConditional(ConditionalExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitConstant(ConstantExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitDebugInfo(DebugInfoExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitDefault(DefaultExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitDynamic(DynamicExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitExtension(Expression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitGoto(GotoExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitIndex(IndexExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitInvocation(InvocationExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitLabel(LabelExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitLambda<T>(Expression<T> node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitListInit(ListInitExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitLoop(LoopExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitMember(MemberExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitMemberInit(MemberInitExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitMethodCall(MethodCallExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitNew(NewExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitNewArray(NewArrayExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitParameter(ParameterExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitRuntimeVariables(RuntimeVariablesExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitSwitch(SwitchExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitTry(TryExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitTypeBinary(TypeBinaryExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-        protected override Expression VisitUnary(UnaryExpression node)
-        {
-            PrefixExpression.Add(node.NodeType.ToString());
-            return Visit(node);
-        }
-
     }
 }
