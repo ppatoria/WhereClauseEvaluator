@@ -87,13 +87,26 @@ namespace BinaryTree
     }
 
     public static class Traverse
-    { 
+    {
+        static readonly IDictionary<int, char> padCharMap = new Dictionary<int, char>();
+        static readonly IDictionary<int, ConsoleColor> printColor = new Dictionary<int, ConsoleColor>();
+        static Traverse()
+        {
+            padCharMap.Add(1, '*');
+            padCharMap.Add(2, '_');
+            padCharMap.Add(3, '=');
+            padCharMap.Add(4, '-');
+            padCharMap.Add(5, '.');
+            padCharMap.Add(6, '~');
+            padCharMap.Add(7, '`');
 
+
+        }
         public static void PreOrder(this Node localRoot)
         {
             if (localRoot != null)
             {
-                localRoot.ToString();
+                localRoot.Data.ToString();
                 PreOrder(localRoot.Left);
                 PreOrder(localRoot.Right);
             }
@@ -104,7 +117,7 @@ namespace BinaryTree
             if (localRoot != null)
             {
                 InOrder(localRoot.Left);
-                localRoot.ToString();
+                localRoot.Data.ToString();
                 InOrder(localRoot.Right);
             }
         }
@@ -115,15 +128,174 @@ namespace BinaryTree
             {
                 PostOrder(localRoot.Left);
                 PostOrder(localRoot.Right);
-                localRoot.ToString();
+                localRoot.Data.ToString();
             }
         }
 
-        public static void Print(this Node root)
+        private static void PrintColor(string text, bool? isSuccessful = null)
         {
-            PreOrder(root);
+            if(isSuccessful == null)
+            {
+                    Console.WriteLine(text);
+                return;
+
+            }
+
+            if(isSuccessful.Value)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(text);
+                    Console.ResetColor();
+
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine(text);
+                    Console.ResetColor();
+            }
         }
 
+        public static void PrintMin(this Node node, int align = 12)
+        {
+            if (node != null)
+            {
+                string result = string.Empty;
+                if (node.Data is BinaryOperator)
+                {
+                    var bnode = (BinaryOperator)node.Data;
+                    result = $"{bnode.Data}\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), '-');
+                    PrintColor(treeView, bnode.Result);
+                }
+
+                if (node.Data is UnaryOperator)
+                {
+                    var unode = (UnaryOperator)node.Data;
+                    result = $"{unode.Data}\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), '-');
+                    PrintColor(treeView, unode.Result);
+                }
+                if (node.Data is ColumnOperand)
+                {
+                    var operand = (ColumnOperand)node.Data;
+                    result = $"{operand.Data.Key}[{operand.Data.Value}]\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), ' ');
+                    PrintColor(treeView);
+                }
+                if (node.Data is ConstantOperand)
+                {
+                    var operand = (ConstantOperand)node.Data;
+                    result = $"{operand.Data}\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), ' ');
+                    PrintColor(treeView);
+                }
+
+                if (node.Data is ConstantOperandOfList)
+                {
+                    var operand = (ConstantOperandOfList)node.Data;
+                    result = $"({string.Join(",", operand.Data)})\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), ' ');
+                    PrintColor(treeView);
+                }
+
+                PrintMin(node.Left, align);
+                PrintMin(node.Right, align);
+            }
+        }
+
+        public static void Print(this Node node, int align = 4)
+        {            
+            if (node != null)
+            {
+                string result = string.Empty;
+                if(node.Data is BinaryOperator)
+                {
+                    var bnode = (BinaryOperator)node.Data;
+                    result = $"{bnode.Data}\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), padCharMap[node.Level]);
+                    PrintColor(treeView, bnode.Result);
+                }
+
+                if(node.Data is UnaryOperator)
+                {
+                    var unode = (UnaryOperator)node.Data;
+                    result = $"{unode.Data}[{unode.Result}]\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), padCharMap[node.Level]);
+                    PrintColor(treeView, unode.Result);
+                }
+                if (node.Data is ColumnOperand)
+                {
+                    var operand = (ColumnOperand)node.Data;
+                     result = $"{operand.Data.Key}[{operand.Data.Value}]\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), ' ');
+                    PrintColor(treeView);
+                }
+                if (node.Data is ConstantOperand)
+                {
+                    var operand = (ConstantOperand)node.Data;
+                    result = $"{operand.Data}\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), ' ');
+                    PrintColor(treeView);
+                }
+
+                if (node.Data is ConstantOperandOfList)
+                {
+                    var operand = (ConstantOperandOfList)node.Data;
+                    result = $"({string.Join(",", operand.Data)})\n";
+                    var treeView = result.PadLeft(result.Length + (node.Level * align), ' ');
+                    PrintColor(treeView);
+                }
+
+                Print(node.Left, align);
+                Print(node.Right, align);
+            }
+        }
+
+        public static void ToString(this Node node, ref string treeView, int align = 4)
+        {            
+            if (node != null)
+            {
+                string result = string.Empty;
+                if(node.Data is BinaryOperator)
+                {
+                    var bnode = (BinaryOperator)node.Data;
+                    result = $"{bnode.Data}[{bnode.Result}]\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), padCharMap[node.Level]);
+                }
+
+                if(node.Data is UnaryOperator)
+                {
+                    var unode = (UnaryOperator)node.Data;
+                    result = $"{unode.Data}[{unode.Result}]\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), padCharMap[node.Level]);
+                }
+                if(node.Data is ColumnOperand)
+                {
+                    var operand = (ColumnOperand)node.Data;
+                     result = $"{operand.Data.Key}[{operand.Data.Value}]\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), ' ');
+                }
+
+                if (node.Data is ConstantOperand)
+                {
+                    var operand = (ConstantOperand)node.Data;
+                    result = $"{operand.Data}\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), ' ');
+                }
+
+                if (node.Data is ConstantOperandOfList)
+                {
+                    var operand = (ConstantOperandOfList)node.Data;
+                    result = $"({string.Join(",", operand.Data)})\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), ' ');
+                }
+                
+                ToString(node.Left, ref treeView, align);
+                ToString(node.Right, ref treeView, align);
+            }
+        }
+        
         public static void AsString(this Node node, ref string treeView, int align = 1, char pad = '-' )
         {
             if (node != null)
@@ -187,7 +359,7 @@ namespace BinaryTree
             new ExpressionParser.ExpressionParser(parser.ToExpression(mockRecord.Object))
                 .PrefixExpression
                 .CreateBTree()
-                .AsString(ref treeView, 4, ' ');
+                .PrintMin();
             Console.WriteLine(treeView);
             Debug.WriteLine(treeView);
         }
