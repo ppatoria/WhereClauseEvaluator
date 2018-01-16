@@ -36,7 +36,6 @@ namespace WhereClauseEvaluatorTests
             var parser = new WhereClauseParser(whereClause);
             var whereExpression = parser.ToExpression(_mockRecord.Object);
             Debug.WriteLine($"{whereClause} =>\n {whereExpression}");
-            Debug.WriteLine(parser.LastResult);
             return Expression.Lambda<Func<bool>>(whereExpression).Compile()();
         }
 

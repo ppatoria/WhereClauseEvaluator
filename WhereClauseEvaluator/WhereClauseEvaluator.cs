@@ -37,7 +37,6 @@ namespace SqlUtil
 
     public class WhereClauseParser
     {
-        public List<string> LastResult { get; }
         private BooleanExpression expression_;
         public WhereClauseParser(string whereClause)
         {
@@ -49,7 +48,6 @@ namespace SqlUtil
             {
                 throw new Exception($"Error {errors} while parsing");
             }
-            LastResult = new List<string>();
         }
 
         public Expression ToExpression<T>(T record) where T:IRecord
@@ -70,12 +68,10 @@ namespace SqlUtil
                 switch (expr.BinaryExpressionType)
                 {
                     case BooleanBinaryExpressionType.And:
-                        LastResult.Add("AND");                        
                         return Expression.And(
                             ToExpression(expr.FirstExpression, record),
                             ToExpression(expr.SecondExpression, record));
                     case BooleanBinaryExpressionType.Or:
-                        LastResult.Add("OR");
                         return Expression.Or(
                             ToExpression<T>(expr.FirstExpression, record),
                             ToExpression(expr.SecondExpression, record));

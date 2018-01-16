@@ -12,42 +12,46 @@ namespace BinaryTree
 {
     public class Node
     {
-        public string Data;
+        public object Data;
         public Node Left;
         public Node Right;
         public int Level;
-        public Node(string x)
+        public Node(object x)
         {
             Data = x;
         }
 
-        public void PrintData()
-        {
-            Console.WriteLine(Data.PadLeft(Data.Length + Level, '-'));
-        }
     }
     public static class BinaryTree
     {
 
-        public static Node CreateBTree(this List<string> prefix)
+        public static Node CreateBTree(this List<object> prefix)
         {
             prefix.Reverse();
             var stk = new Stack<Node>(prefix.Count);
             Node newNode;
-            foreach (var symbol in prefix)
+            foreach (var node in prefix)
             {
-                if (symbol.StartsWith("AND") || symbol.StartsWith("OR") || symbol.StartsWith("NOT"))
+                if(node is BinaryOperator)
                 {
                     Node ptr1 = stk.Pop();
                     Node ptr2 = stk.Pop();
-                    newNode = new Node(symbol);
-                    newNode.Left = ptr2;
-                    newNode.Right = ptr1;
+                    newNode = new Node(node);
+                    newNode.Left = ptr1;
+                    newNode.Right = ptr2;
+                    stk.Push(newNode);
+                }
+                else if(node is UnaryOperator)
+                {
+                    Node ptr = stk.Pop();
+                    newNode = new Node(node);
+                    newNode.Left = null;
+                    newNode.Right = ptr;
                     stk.Push(newNode);
                 }
                 else
                 {
-                    newNode = new Node(symbol);
+                    newNode = new Node(node);
                     stk.Push(newNode);
                 }
 
@@ -89,7 +93,7 @@ namespace BinaryTree
         {
             if (localRoot != null)
             {
-                localRoot.PrintData();
+                localRoot.ToString();
                 PreOrder(localRoot.Left);
                 PreOrder(localRoot.Right);
             }
@@ -100,7 +104,7 @@ namespace BinaryTree
             if (localRoot != null)
             {
                 InOrder(localRoot.Left);
-                localRoot.PrintData();
+                localRoot.ToString();
                 InOrder(localRoot.Right);
             }
         }
@@ -111,7 +115,7 @@ namespace BinaryTree
             {
                 PostOrder(localRoot.Left);
                 PostOrder(localRoot.Right);
-                localRoot.PrintData();
+                localRoot.ToString();
             }
         }
 
@@ -120,13 +124,47 @@ namespace BinaryTree
             PreOrder(root);
         }
 
-        public static void AsString(this Node root, ref string treeView)
+        public static void AsString(this Node node, ref string treeView, int align = 1, char pad = '-' )
         {
-            if (root != null)
+            if (node != null)
             {
-                treeView = treeView + $"{root.Data.PadLeft(root.Data.Length + root.Level, '-')}\n";
-                AsString(root.Left, ref treeView);
-                AsString(root.Right, ref treeView);
+                string result = string.Empty;
+                if(node.Data is BinaryOperator)
+                {
+                    var bnode = (BinaryOperator)node.Data;
+                    result = $"{bnode.Data}[{bnode.Result}]\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), pad);
+                }
+
+                if(node.Data is UnaryOperator)
+                {
+                    var unode = (UnaryOperator)node.Data;
+                    result = $"{unode.Data}[{unode.Result}]\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), pad);
+                }
+                if(node.Data is ColumnOperand)
+                {
+                    var operand = (ColumnOperand)node.Data;
+                     result = $"{operand.Data.Key}[{operand.Data.Value}]\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), ' ');
+                }
+
+                if (node.Data is ConstantOperand)
+                {
+                    var operand = (ConstantOperand)node.Data;
+                    result = $"{operand.Data}\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), ' ');
+                }
+
+                if (node.Data is ConstantOperandOfList)
+                {
+                    var operand = (ConstantOperandOfList)node.Data;
+                    result = $"({string.Join(",", operand.Data)})\n";
+                    treeView += result.PadLeft(result.Length + (node.Level * align), ' ');
+                }
+                
+                AsString(node.Left, ref treeView, align, pad);
+                AsString(node.Right, ref treeView, align, pad);
             }
         }
     }
@@ -140,15 +178,18 @@ namespace BinaryTree
             mockRecord.Setup(r => r.GetValue("c")).Returns("0");
             mockRecord.Setup(r => r.GetValue("c1")).Returns("1");
             mockRecord.Setup(r => r.GetValue("c2")).Returns("2");
-            var parser = new WhereClauseParser("((c in (1,2) or c2=2) and (c=1 or c like '0')) or c1=0");
+            var parser = new WhereClauseParser("((c in (1,2) or c2=2) and (c=1 or c like '0')) or (c1=0 or not c1 in(1,2))");
+            //var parser = new WhereClauseParser("not c1 in(1,2)");
+            //var parser = new WhereClauseParser("c1 > 1 and c1 >=1");
             var expr = parser.ToExpression(mockRecord.Object);
             Console.WriteLine(Expression.Lambda<Func<bool>>(expr).Compile()());
             string treeView = "";
-            parser
-                .LastResult
+            new ExpressionParser.ExpressionParser(parser.ToExpression(mockRecord.Object))
+                .PrefixExpression
                 .CreateBTree()
-                .AsString(ref treeView);
+                .AsString(ref treeView, 4, ' ');
             Console.WriteLine(treeView);
+            Debug.WriteLine(treeView);
         }
     }
 }

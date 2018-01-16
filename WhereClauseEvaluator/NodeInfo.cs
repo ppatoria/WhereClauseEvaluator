@@ -6,17 +6,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 namespace SqlUtil
 {
-    public enum NodeType
-    {
-        ColumnOperand,
-        ConstantOperand,
-        BinaryOperator,
-        UnaryOperator
-    };
-
     public interface INodeInfo<T>
     {
-        NodeType NodeType { get; }
         T Data { get; }
     }
     public class BinaryOperator : INodeInfo<string>
@@ -25,10 +16,8 @@ namespace SqlUtil
         {
             Data = value;
         }
-        public NodeType NodeType => NodeType.BinaryOperator;
-
         public string Data { get; }
-        public bool Result { get; set; }
+        public bool? Result { get; set; }
     }
     public class UnaryOperator : INodeInfo<string>
     {
@@ -36,10 +25,9 @@ namespace SqlUtil
         {
             Data = value;
         }
-        public NodeType NodeType => NodeType.UnaryOperator;
 
         public string Data { get; }
-        public bool Result { get; set; }
+        public bool? Result { get; set; }
     }
 
     public class ConstantOperand : INodeInfo<string>
@@ -48,7 +36,6 @@ namespace SqlUtil
         {
             Data = value;
         }
-        public NodeType NodeType => NodeType.ConstantOperand;
 
         public string Data { get; }
     }
@@ -58,12 +45,13 @@ namespace SqlUtil
         {
             Data = value;
         }
-        public NodeType NodeType => NodeType.ConstantOperand;
 
         public IList<string> Data { get; }
     }
 
-    public class ColumnOperand : IEquatable<ConstantOperand>, INodeInfo<KeyValuePair<string,string>>
+    public class ColumnOperand 
+        : IEquatable<ConstantOperand>, 
+        INodeInfo<KeyValuePair<string,string>>
     {
         
         public ColumnOperand(string name, string value)
@@ -73,8 +61,6 @@ namespace SqlUtil
 
 
         public KeyValuePair<string,string> Data { get; set; }
-
-        public NodeType NodeType =>  NodeType.ColumnOperand;
 
 
         public override int GetHashCode()

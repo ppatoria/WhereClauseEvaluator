@@ -55,9 +55,12 @@
   <ItemGroup>
     <Compile Include="BinaryTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WhereExpressionVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExpressionParser\ExpressionParser.csproj">
+      <Project>{47b6487c-8693-46da-ac0c-f0400c35e067}</Project>
+      <Name>ExpressionParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WhereClauseEvaluator\WhereClauseEvaluator.csproj">
       <Project>{3ba8739f-d038-4f9c-b993-4f79ce4ca0fd}</Project>
       <Name>WhereClauseEvaluator</Name>

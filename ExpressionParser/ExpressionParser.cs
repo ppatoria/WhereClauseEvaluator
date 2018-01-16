@@ -18,19 +18,6 @@ namespace ExpressionParser
             Parse(expression);
         }
 
-        private string ParseObject(object obj)
-        {
-            if(obj is List<string>)
-            {
-                return string.Join(",", ((List<string>)obj));
-            }
-            if(obj is Regex)
-            {
-                return ((Regex)obj).ToString();
-            }
-            throw new NotImplementedException();
-        }
-
         private void Parse(Expression node)
         {
             if (node is BinaryExpression)
@@ -67,18 +54,14 @@ namespace ExpressionParser
             if(node is MethodCallExpression)
             {
                 var mnode = (MethodCallExpression)node;
-                PrefixExpression.Add(new BinaryOperator(mnode.Method.Name));
+                var op = new BinaryOperator(mnode.Method.Name);
+                op.Result = Expression.Lambda<Func<bool>>(mnode).Compile()();
+                PrefixExpression.Add(op);
 
                 foreach(var arg in mnode.Arguments)
                 {
                     var argValue = ((ConstantExpression)arg).Value;
                     PrefixExpression.Add(argValue);
-                }
-
-                if (mnode.Object != null)
-                {
-                    var Object = ParseObject(((ConstantExpression)mnode.Object).Value);
-                    PrefixExpression.Add(Object);
                 }
             }
         }
