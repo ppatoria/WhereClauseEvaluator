@@ -33,6 +33,22 @@ namespace WhereClauseVisualizer
         {
 
         }
+        private void SetColor(TreeNode node, bool? result)
+        {
+            if (result == null)
+            {
+                throw new Exception("Invalid Data");
+            }
+            if (result.Value)
+            {
+                node.BackColor = Color.LightGreen;
+                
+            }
+            else
+            {
+                node.BackColor = Color.LightPink;
+            }
+        }
         public void CreateBTree(List<object> prefix)
         {
             prefix.Reverse();
@@ -42,24 +58,46 @@ namespace WhereClauseVisualizer
             {
                 if (node is BinaryOperator)
                 {
-                    TreeNode ptr1 = stk.Pop();
-                    TreeNode ptr2 = stk.Pop();
-                    newNode = new TreeNode(((BinaryOperator)node).Data);
-                    newNode.Nodes.Add(ptr1);
-                    newNode.Nodes.Add(ptr2);
+                    TreeNode childNode1 = stk.Pop();                    
+                    TreeNode childNode2 = stk.Pop();
+
+                    var op = (BinaryOperator)node;                    
+                    newNode = new TreeNode(op.Data);
+                    newNode.Nodes.Add(childNode1);
+                    newNode.Nodes.Add(childNode2);
+                    SetColor(newNode, op.Result);
                     stk.Push(newNode);
                 }
                 else if (node is UnaryOperator)
                 {
-                    TreeNode ptr = stk.Pop();
-                    newNode = new TreeNode(((UnaryOperator)node).Data);
-                    newNode.Nodes.Add(ptr);
+                    var op = (UnaryOperator)node;                    
+                    TreeNode childNode = stk.Pop();
+                    newNode = new TreeNode(op.Data);
+                    newNode.Nodes.Add(childNode);
+                    SetColor(newNode, op.Result);
                     stk.Push(newNode);
                 }
                 else
                 {
-                    newNode = new TreeNode(node.ToString());
-                    stk.Push(newNode);
+                    if(node is ColumnOperand)
+                    {
+                        var operand = (ColumnOperand)node;
+                        newNode = new TreeNode($"{operand.Data.Key}[{operand.Data.Value}]");
+                        stk.Push(newNode);
+                    }
+                    if(node is ConstantOperand)
+                    {
+                        var operand = (ConstantOperand)node;
+                        newNode = new TreeNode(operand.Data);
+                        stk.Push(newNode);
+
+                    }
+                    if(node is ConstantOperandOfList)
+                    {
+                        var operand = (ConstantOperandOfList)node;
+                        newNode = new TreeNode($"({string.Join(",",operand.Data)})");
+                        stk.Push(newNode);
+                    }
                 }
 
             }
