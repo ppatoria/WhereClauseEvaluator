@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryTree", "BinaryTree\Bi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionParser", "ExpressionParser\ExpressionParser.csproj", "{47B6487C-8693-46DA-AC0C-F0400C35E067}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereClauseVisualizer", "WhereClauseVisualizer\WhereClauseVisualizer.csproj", "{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{47B6487C-8693-46DA-AC0C-F0400C35E067}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47B6487C-8693-46DA-AC0C-F0400C35E067}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47B6487C-8693-46DA-AC0C-F0400C35E067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

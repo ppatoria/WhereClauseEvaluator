@@ -350,18 +350,19 @@ namespace BinaryTree
             mockRecord.Setup(r => r.GetValue("c")).Returns("0");
             mockRecord.Setup(r => r.GetValue("c1")).Returns("1");
             mockRecord.Setup(r => r.GetValue("c2")).Returns("2");
-            var parser = new WhereClauseParser("((c in (1,2) or c2=2) and (c=1 or c like '0')) or (c1=0 or not c1 in(1,2))");
+            var parser = new WhereClauseParser("((c in (1,2) or c2=2) and (c=1 or c1=1 or c2=2 or c2=5 or c like 0)) or (c1=0 or not c1 in(1,2))");
             //var parser = new WhereClauseParser("not c1 in(1,2)");
             //var parser = new WhereClauseParser("c1 > 1 and c1 >=1");
+            //var parser = new WhereClauseParser("c=0 or c1=1 or c2=2");
             var expr = parser.ToExpression(mockRecord.Object);
             Console.WriteLine(Expression.Lambda<Func<bool>>(expr).Compile()());
             string treeView = "";
             new ExpressionParser.ExpressionParser(parser.ToExpression(mockRecord.Object))
                 .PrefixExpression
                 .CreateBTree()
-                .PrintMin();
+                .PrintMin(4);
             Console.WriteLine(treeView);
             Debug.WriteLine(treeView);
-        }
+         }
     }
 }
