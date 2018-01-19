@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using SqlUtil;
+using SqlParser;
 using Moq;
 using System.Diagnostics;
 using System.Linq.Expressions;
@@ -11,11 +11,11 @@ namespace WhereClauseEvaluatorTests
     [TestFixture]
     public class WhereClauseEvaluatorTests
     {
-        private Mock<IRecord> _mockRecord;
+        private Mock<ILookup> _mockRecord;
         [SetUp]
         public void Init()
         {
-            _mockRecord = new Mock<IRecord>();
+            _mockRecord = new Mock<ILookup>();
             _mockRecord.Setup(r => r.GetValue("c")).Returns("0");
             _mockRecord.Setup(r => r.GetValue("c1")).Returns("1");
             _mockRecord.Setup(r => r.GetValue("c2")).Returns("2");

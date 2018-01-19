@@ -1,6 +1,6 @@
 ﻿using ExpressionParser;
 using Moq;
-using SqlUtil;
+using SqlParser;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -106,7 +106,7 @@ namespace WhereClauseVisualizer
 
         private void ViewCommand_Click(object sender, EventArgs e)
         {
-            Mock<IRecord> mockRecord = new Mock<IRecord>();
+            Mock<ILookup> mockRecord = new Mock<ILookup>();
             mockRecord.Setup(r => r.GetValue("c")).Returns("0");
             mockRecord.Setup(r => r.GetValue("c1")).Returns("1");
             mockRecord.Setup(r => r.GetValue("c2")).Returns("2");

@@ -97,9 +97,9 @@
       <Project>{47B6487C-8693-46DA-AC0C-F0400C35E067}</Project>
       <Name>ExpressionParser</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WhereClauseEvaluator\WhereClauseEvaluator.csproj">
+    <ProjectReference Include="..\WhereClauseEvaluator\WhereClauseParser.csproj">
       <Project>{3BA8739F-D038-4F9C-B993-4F79CE4CA0FD}</Project>
-      <Name>WhereClauseEvaluator</Name>
+      <Name>WhereClauseParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

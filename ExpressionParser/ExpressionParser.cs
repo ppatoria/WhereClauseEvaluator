@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SqlUtil;
+using SqlParser;
 namespace ExpressionParser
 {
     public class ExpressionParser : ExpressionVisitor

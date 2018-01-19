@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using SqlUtil;
+using SqlParser;
 
 namespace WhereClauseEvaluatorTests
 {

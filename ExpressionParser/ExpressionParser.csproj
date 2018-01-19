@@ -44,9 +44,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WhereClauseEvaluator\WhereClauseEvaluator.csproj">
+    <ProjectReference Include="..\WhereClauseEvaluator\WhereClauseParser.csproj">
       <Project>{3ba8739f-d038-4f9c-b993-4f79ce4ca0fd}</Project>
-      <Name>WhereClauseEvaluator</Name>
+      <Name>WhereClauseParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

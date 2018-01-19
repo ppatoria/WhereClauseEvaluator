@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereClauseEvaluator", "WhereClauseEvaluator\WhereClauseEvaluator.csproj", "{3BA8739F-D038-4F9C-B993-4F79CE4CA0FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereClauseParser", "WhereClauseEvaluator\WhereClauseParser.csproj", "{3BA8739F-D038-4F9C-B993-4F79CE4CA0FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereClauseEvaluatorTests", "WhereClauseEvaluatorTests\WhereClauseEvaluatorTests.csproj", "{84704C11-8D18-40BD-BF5C-DCF3A9E89DD6}"
 EndProject

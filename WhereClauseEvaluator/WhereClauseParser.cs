@@ -9,7 +9,7 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Text.RegularExpressions;
 using System.Linq.Expressions;
 
-namespace SqlUtil
+namespace SqlParser
 {
     public static class SqlOperations
     {
@@ -23,10 +23,7 @@ namespace SqlUtil
             return rhs.Data.Contains(lhs.Data.Value);
         }
     }
-    public interface IRecord
-    {
-        string GetValue(string columnName);
-    }
+    
     public class Node<T>
     {
         public T Data;
@@ -50,7 +47,7 @@ namespace SqlUtil
             }
         }
 
-        public Expression ToExpression<T>(T record) where T:IRecord
+        public Expression ToExpression<T>(T record) where T:ILookup
         {
             return ToExpression(expression_ ,record);
         }
@@ -60,7 +57,7 @@ namespace SqlUtil
             return Expression.Lambda<Func<bool>>(expr).Compile()();
         }
 
-        private Expression ToExpression<T>(BooleanExpression expression, T record ) where T:IRecord
+        private Expression ToExpression<T>(BooleanExpression expression, T record ) where T:ILookup
         {
             if (expression is BooleanBinaryExpression)
             {

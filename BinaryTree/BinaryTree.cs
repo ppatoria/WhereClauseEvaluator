@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using SqlUtil;
+using SqlParser;
 
 namespace BinaryTree
 {
@@ -346,7 +346,7 @@ namespace BinaryTree
     {
         public static void Main()
         {
-            Mock<IRecord> mockRecord = new Mock<IRecord>();
+            Mock<ILookup> mockRecord = new Mock<ILookup>();
             mockRecord.Setup(r => r.GetValue("c")).Returns("0");
             mockRecord.Setup(r => r.GetValue("c1")).Returns("1");
             mockRecord.Setup(r => r.GetValue("c2")).Returns("2");
