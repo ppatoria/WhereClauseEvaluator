@@ -23,14 +23,6 @@ namespace SqlParser
             return rhs.Data.Contains(lhs.Data.Value);
         }
     }
-    
-    public class Node<T>
-    {
-        public T Data;
-        public Node<T> Right;
-        public Node<T> Left;
-        public int Level = 0;
-    }
 
     public class WhereClauseParser
     {

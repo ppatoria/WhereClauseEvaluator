@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereClauseParser", "WhereC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereClauseEvaluatorTests", "WhereClauseEvaluatorTests\WhereClauseEvaluatorTests.csproj", "{84704C11-8D18-40BD-BF5C-DCF3A9E89DD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryTree", "BinaryTree\BinaryTree.csproj", "{E605B8BC-B1F8-4957-AF1D-672A6860CC48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryExpressionVisualizer", "BinaryTree\BinaryExpressionVisualizer.csproj", "{E605B8BC-B1F8-4957-AF1D-672A6860CC48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionParser", "ExpressionParser\ExpressionParser.csproj", "{47B6487C-8693-46DA-AC0C-F0400C35E067}"
 EndProject
