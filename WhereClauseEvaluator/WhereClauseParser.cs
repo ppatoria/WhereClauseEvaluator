@@ -63,7 +63,7 @@ namespace SqlParser
         ///       Else if implemetation is not provided in the directory use overloaded ToExpression(ILookup) method.
         /// </summary>
         /// <returns></returns>
-        public Expression ToExpression()
+        public Expression ToExpression(string recordForLookup)
         {
             Compose();
             if (_lookupFactory == null)
@@ -74,7 +74,7 @@ namespace SqlParser
                         or \n
                         use overloaded ToExpression(ILookup) method instead and pass the required ILoopup implementation");
             }
-            var lookupImpl = _lookupFactory.GetLookup();
+            var lookupImpl = _lookupFactory.GetLookup(recordForLookup);
             return ToExpression(lookupImpl);
         }
 

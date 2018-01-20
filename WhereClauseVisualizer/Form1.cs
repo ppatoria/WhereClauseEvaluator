@@ -107,21 +107,21 @@ namespace WhereClauseVisualizer
 
         private void ViewCommand_Click(object sender, EventArgs e)
         {
-            Mock<ILookup> mockRecord = new Mock<ILookup>();
-            mockRecord.Setup(r => r.GetValue("c")).Returns("0");
-            mockRecord.Setup(r => r.GetValue("c1")).Returns("1");
-            mockRecord.Setup(r => r.GetValue("c2")).Returns("2");
-
             var whereClause = WhereClauseTextBox.Text.Trim();
             var parser = new WhereClauseParser(whereClause);
-            var expr = parser.ToExpression(mockRecord.Object);
-            Console.WriteLine(Expression.Lambda<Func<bool>>(expr).Compile()());
-            var prefix = new ExpressionParser.ExpressionParser(parser.ToExpression(mockRecord.Object))
+
+            var expr = parser.ToExpression(recordForLookup.Text.Trim());
+            var prefix = new ExpressionParser.ExpressionParser(expr)
                 .PrefixExpression;
             CreateBTree(prefix);
         }
 
         private void ExpressionTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

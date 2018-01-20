@@ -10,6 +10,6 @@ namespace Lookup
     [InheritedExport(typeof(ILookupFactory))]
     public interface ILookupFactory
     {
-        ILookup GetLookup();
+        ILookup GetLookup(string str);
     }
 }

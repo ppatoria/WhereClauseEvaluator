@@ -31,6 +31,9 @@
             this.treeView = new System.Windows.Forms.TreeView();
             this.WhereClauseTextBox = new System.Windows.Forms.RichTextBox();
             this.ViewCommand = new System.Windows.Forms.Button();
+            this.recordForLookup = new System.Windows.Forms.RichTextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // treeView
@@ -60,11 +63,37 @@
             this.ViewCommand.UseVisualStyleBackColor = true;
             this.ViewCommand.Click += new System.EventHandler(this.ViewCommand_Click);
             // 
+            // recordForLookup
+            // 
+            this.recordForLookup.Location = new System.Drawing.Point(683, 162);
+            this.recordForLookup.Name = "recordForLookup";
+            this.recordForLookup.Size = new System.Drawing.Size(1117, 96);
+            this.recordForLookup.TabIndex = 3;
+            this.recordForLookup.Text = "";
+            this.recordForLookup.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(701, 415);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(1007, 22);
+            this.textBox1.TabIndex = 4;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(707, 471);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(1331, 22);
+            this.textBox2.TabIndex = 5;
+            // 
             // WhereClauseVisualizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1980, 1093);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.recordForLookup);
             this.Controls.Add(this.ViewCommand);
             this.Controls.Add(this.WhereClauseTextBox);
             this.Controls.Add(this.treeView);
@@ -72,6 +101,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -80,6 +110,9 @@
         private System.Windows.Forms.TreeView treeView;
         private System.Windows.Forms.RichTextBox WhereClauseTextBox;
         private System.Windows.Forms.Button ViewCommand;
+        private System.Windows.Forms.RichTextBox recordForLookup;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }
 
