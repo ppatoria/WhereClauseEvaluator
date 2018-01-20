@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Moq;
 using ExpressionParser;
 using SqlParser;
-
+using Lookup;
 
 namespace BinaryTree
 {
@@ -153,17 +153,23 @@ namespace BinaryTree
 
             new ExpressionParser.ExpressionParser(parser.ToExpression(mockRecord.Object))
                 .PrefixExpression
-                .ToBTree()
+                .ToTree()
                 .Print();
 
 
             string treeView = new ExpressionParser.ExpressionParser(parser.ToExpression(mockRecord.Object))
                 .PrefixExpression
-                .ToBTree()
+                .ToTree()
                 .AsString(4);
 
             Console.WriteLine(treeView);
             Debug.WriteLine(treeView);
+
+
+            new ExpressionParser.ExpressionParser(parser.ToExpression())
+                .PrefixExpression
+                .ToTree()
+                .Print();
          }
     }
 }

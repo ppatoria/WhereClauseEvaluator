@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using System;
 using ExpressionParser;
+using Lookup;
 
 namespace WhereClauseEvaluatorTests
 {

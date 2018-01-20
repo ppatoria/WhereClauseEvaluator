@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Text.RegularExpressions;
 using System.Linq.Expressions;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using Lookup;
 
 namespace SqlParser
 {
@@ -27,125 +28,158 @@ namespace SqlParser
     public class WhereClauseParser
     {
         private BooleanExpression expression_;
-        public WhereClauseParser(string whereClause)
+        DirectoryCatalog _dirCatalog;
+
+        [Import(typeof(ILookupFactory), AllowRecomposition = true)]
+        private ILookupFactory _lookupFactory;
+
+
+        private void Compose()
         {
-            IList<ParseError> errors = null;
+            //var path = $@"{Directory.GetCurrentDirectory()}\Plugin";
+            var path = @"C:\Users\prashubh\Documents\Visual Studio 2017\Projects\WhereClauseEvaluator\SampleLookup\bin\Debug\Plugin";
+             _dirCatalog = new DirectoryCatalog(path);
+            CompositionContainer container = new CompositionContainer(_dirCatalog);
+            container.SatisfyImportsOnce(this);
+            container.ComposeParts(this);
+        }
+
+        public WhereClauseParser(string whereClause)
+        {            
             expression_ = new TSql100Parser(false)
-                .ParseBooleanExpression(new StringReader(whereClause),
-                out errors);
+                .ParseBooleanExpression(new StringReader(whereClause), out IList<ParseError>  errors);
             if(errors != null && errors.Any())
             {
                 throw new Exception($"Error {errors} while parsing");
             }
         }
-
-        public Expression ToExpression<T>(T record) where T:ILookup
-        {
-            return ToExpression(expression_ ,record);
-        }
-
         private bool Evaluate(Expression expr)
         {
             return Expression.Lambda<Func<bool>>(expr).Compile()();
         }
-
-        private Expression ToExpression<T>(BooleanExpression expression, T record ) where T:ILookup
+        /// <summary>
+        /// Creates Linq Expression for a where clause string.
+        /// NOTE: User need to provide the implementation of ILookup and place the assembly in Pluging directory under working directory.
+        ///       Else if implemetation is not provided in the directory use overloaded ToExpression(ILookup) method.
+        /// </summary>
+        /// <returns></returns>
+        public Expression ToExpression()
         {
-            if (expression is BooleanBinaryExpression)
+            Compose();
+            if (_lookupFactory == null)
             {
-                var expr = (BooleanBinaryExpression)expression;
-                switch (expr.BinaryExpressionType)
+                throw new InvalidOperationException(
+                    $@"ILookup is null.\n 
+                        Either provide the implementation of ILookup and place in the Plugin directory under working directory \n
+                        or \n
+                        use overloaded ToExpression(ILookup) method instead and pass the required ILoopup implementation");
+            }
+            var lookupImpl = _lookupFactory.GetLookup();
+            return ToExpression(lookupImpl);
+        }
+
+        public Expression ToExpression<T>(T lookup) where T : ILookup
+        {
+            return ToExpression(expression_);
+
+            Expression ToExpression(BooleanExpression expression)
+            {
+                if (expression is BooleanBinaryExpression)
                 {
-                    case BooleanBinaryExpressionType.And:
-                        return Expression.And(
-                            ToExpression(expr.FirstExpression, record),
-                            ToExpression(expr.SecondExpression, record));
-                    case BooleanBinaryExpressionType.Or:
-                        return Expression.Or(
-                            ToExpression<T>(expr.FirstExpression, record),
-                            ToExpression(expr.SecondExpression, record));
+                    var expr = (BooleanBinaryExpression)expression;
+                    switch (expr.BinaryExpressionType)
+                    {
+                        case BooleanBinaryExpressionType.And:
+                            return Expression.And(
+                                ToExpression(expr.FirstExpression),
+                                ToExpression(expr.SecondExpression));
+                        case BooleanBinaryExpressionType.Or:
+                            return Expression.Or(
+                                ToExpression(expr.FirstExpression),
+                                ToExpression(expr.SecondExpression));
+                    }
                 }
-            }
 
-            if(expression is BooleanComparisonExpression)
-            {
-                var expr = (BooleanComparisonExpression)expression;
-                var pair = GetKeyValue(expr);
-                var lhs = new ColumnOperand (pair.Key,record.GetValue(pair.Key));
-                var rhs = new ConstantOperand(pair.Value);
-                switch(expr.ComparisonType)
+                if (expression is BooleanComparisonExpression)
                 {
-                    case BooleanComparisonType.Equals:
-                        return  Expression.Equal(
-                            Expression.Constant(lhs),
-                            Expression.Constant(rhs));
-                    case BooleanComparisonType.NotEqualToExclamation:
-                        return Expression.NotEqual(
-                            Expression.Constant(lhs),
-                            Expression.Constant(rhs));
-                    case BooleanComparisonType.GreaterThan:
-                        return Expression.GreaterThan(
-                            Expression.Constant(lhs),
-                            Expression.Constant(rhs));
-                    case BooleanComparisonType.LessThan:
-                        return Expression.LessThan(
-                            Expression.Constant(lhs),
-                            Expression.Constant(rhs));
-                    case BooleanComparisonType.GreaterThanOrEqualTo:
-                        return Expression.GreaterThanOrEqual(
-                            Expression.Constant(lhs),
-                            Expression.Constant(rhs));
-                    case BooleanComparisonType.LessThanOrEqualTo:
-                        return Expression.LessThanOrEqual(
-                            Expression.Constant(lhs),
-                            Expression.Constant(rhs));
-                    default:
-                        throw new NotImplementedException("${expr.ComparisonType} not implemented");
+                    var expr = (BooleanComparisonExpression)expression;
+                    var pair = GetKeyValue(expr);
+                    var lhs = new ColumnOperand(pair.Key, lookup.GetValue(pair.Key));
+                    var rhs = new ConstantOperand(pair.Value);
+                    switch (expr.ComparisonType)
+                    {
+                        case BooleanComparisonType.Equals:
+                            return Expression.Equal(
+                                Expression.Constant(lhs),
+                                Expression.Constant(rhs));
+                        case BooleanComparisonType.NotEqualToExclamation:
+                            return Expression.NotEqual(
+                                Expression.Constant(lhs),
+                                Expression.Constant(rhs));
+                        case BooleanComparisonType.GreaterThan:
+                            return Expression.GreaterThan(
+                                Expression.Constant(lhs),
+                                Expression.Constant(rhs));
+                        case BooleanComparisonType.LessThan:
+                            return Expression.LessThan(
+                                Expression.Constant(lhs),
+                                Expression.Constant(rhs));
+                        case BooleanComparisonType.GreaterThanOrEqualTo:
+                            return Expression.GreaterThanOrEqual(
+                                Expression.Constant(lhs),
+                                Expression.Constant(rhs));
+                        case BooleanComparisonType.LessThanOrEqualTo:
+                            return Expression.LessThanOrEqual(
+                                Expression.Constant(lhs),
+                                Expression.Constant(rhs));
+                        default:
+                            throw new NotImplementedException("${expr.ComparisonType} not implemented");
+                    }
                 }
+
+                if (expression is BooleanParenthesisExpression)
+                {
+                    var expr = (BooleanParenthesisExpression)expression;
+                    return ToExpression(expr.Expression);
+                }
+
+                if (expression is LikePredicate)
+                {
+                    var expr = (LikePredicate)expression;
+                    var pair = GetKeyValue(expr);
+                    var lhs = new ColumnOperand(pair.Key, lookup.GetValue(pair.Key));
+                    var rhs = new ConstantOperand(pair.Value);
+
+                    return Expression.Call(
+                        null,
+                        typeof(SqlOperations).GetMethod("Like"),
+                        Expression.Constant(lhs),
+                        Expression.Constant(rhs));
+                }
+
+                if (expression is InPredicate)
+                {
+                    var expr = (InPredicate)expression;
+                    var pair = GetKeyValue(expr);
+                    var lhs = new ColumnOperand(pair.Key, lookup.GetValue(pair.Key));
+                    var rhs = new ConstantOperandOfList(pair.Value.Select(e => ((Literal)e).Value).ToList());
+
+                    return Expression.Call(
+                        null,
+                        typeof(SqlOperations).GetMethod("In"),
+                        Expression.Constant(lhs),
+                        Expression.Constant(rhs));
+                }
+
+                if (expression is BooleanNotExpression)
+                {
+                    var expr = (BooleanNotExpression)expression;
+                    return Expression.Not(ToExpression(expr.Expression));
+                }
+
+                throw new InvalidExpressionException($"{expression} not supported");
+
             }
-
-            if(expression is BooleanParenthesisExpression)
-            {
-                var expr = (BooleanParenthesisExpression)expression;
-                return ToExpression(expr.Expression, record);
-            }
-
-            if(expression is LikePredicate)
-            {
-                var expr = (LikePredicate)expression;
-                var pair = GetKeyValue(expr);
-                var lhs = new ColumnOperand (pair.Key,record.GetValue(pair.Key));
-                var rhs = new ConstantOperand (pair.Value);
-
-                return Expression.Call(
-                    null,
-                    typeof(SqlOperations).GetMethod("Like"),
-                    Expression.Constant(lhs),
-                    Expression.Constant(rhs));
-            }
-
-            if(expression is InPredicate)
-            {
-                var expr = (InPredicate)expression;
-                var pair = GetKeyValue(expr);
-                var lhs = new ColumnOperand (pair.Key,record.GetValue(pair.Key));
-                var rhs = new ConstantOperandOfList(pair.Value.Select(e => ((Literal)e).Value).ToList());
-
-                return Expression.Call(
-                    null,
-                    typeof(SqlOperations).GetMethod("In"),
-                    Expression.Constant(lhs),
-                    Expression.Constant(rhs));
-            }
-
-            if(expression is BooleanNotExpression)
-            {
-                var expr = (BooleanNotExpression)expression;
-                return Expression.Not(ToExpression(expr.Expression, record));
-            }
-
-            throw new InvalidExpressionException($"{expression} not supported");
-
         }
         private static KeyValuePair<string, List<ScalarExpression>> GetKeyValue(InPredicate expr)
         {

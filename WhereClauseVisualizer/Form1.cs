@@ -1,4 +1,5 @@
 ﻿using ExpressionParser;
+using Lookup;
 using Moq;
 using SqlParser;
 using System;

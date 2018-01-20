@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionParser", "Express
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereClauseVisualizer", "WhereClauseVisualizer\WhereClauseVisualizer.csproj", "{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLookup", "SampleLookup\SampleLookup.csproj", "{C01D7B83-48AF-470D-8C25-693BBDFBDC0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILookup", "ILookup\ILookup.csproj", "{1E926A70-2221-4740-B6C3-C6903D206E90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{706BA825-C3DC-4E7B-B672-8FDC2054CFAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C01D7B83-48AF-470D-8C25-693BBDFBDC0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C01D7B83-48AF-470D-8C25-693BBDFBDC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C01D7B83-48AF-470D-8C25-693BBDFBDC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C01D7B83-48AF-470D-8C25-693BBDFBDC0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E926A70-2221-4740-B6C3-C6903D206E90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E926A70-2221-4740-B6C3-C6903D206E90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E926A70-2221-4740-B6C3-C6903D206E90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E926A70-2221-4740-B6C3-C6903D206E90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

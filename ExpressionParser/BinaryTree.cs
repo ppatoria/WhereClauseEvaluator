@@ -21,7 +21,7 @@ namespace ExpressionParser
     public static class BinaryTree
     {
 
-        public static Node ToBTree(this List<object> prefix)
+        public static Node ToTree(this List<object> prefix)
         {
             prefix.Reverse();
             var stk = new Stack<Node>(prefix.Count);

@@ -76,6 +76,10 @@
       <Project>{47b6487c-8693-46da-ac0c-f0400c35e067}</Project>
       <Name>ExpressionParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ILookup\ILookup.csproj">
+      <Project>{1e926a70-2221-4740-b6c3-c6903d206e90}</Project>
+      <Name>ILookup</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WhereClauseEvaluator\WhereClauseParser.csproj">
       <Project>{3ba8739f-d038-4f9c-b993-4f79ce4ca0fd}</Project>
       <Name>WhereClauseParser</Name>
