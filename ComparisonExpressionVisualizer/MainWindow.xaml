@@ -9,7 +9,7 @@
     <Grid>
         <TreeView Name="expressionTreeView" 
                   HorizontalAlignment="Left" 
-                  Margin="10,0,0,10.4" 
+                  Margin="10,0,0,54.4" 
                   Width="685" 
                   Background="White"/>
         
@@ -34,10 +34,11 @@
         <DataGrid Name="recordKeyValueTable" 
                   Background="LightBlue"
                   HorizontalAlignment="Left" 
-                  Height="302" 
+                  Height="231" 
                   Margin="1252,10,-0.6,0" 
                   VerticalAlignment="Top" 
-                  Width="215"/>
+                  Width="215"
+                  IsReadOnly="False"/>
         
         <Button   Name="drawTreeButton" 
                   Content="View Tree" 
@@ -45,6 +46,20 @@
                   Margin="854,290,0,0" 
                   VerticalAlignment="Top" 
                   Width="75" Click="drawTreeButton_Click"/>
+        
+        <Button   Name="CopyKeyValButton" 
+                  Content="Copy to Clipboard" 
+                  HorizontalAlignment="Left" 
+                  Margin="1319,275,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="150"/>
+        
+        <Button   Name="CopyTreeViewButton" 
+                  Content="Copy to clipboard" 
+                  HorizontalAlignment="Left" 
+                  Margin="356,287,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="150"/>
 
     </Grid>
 </Window>
