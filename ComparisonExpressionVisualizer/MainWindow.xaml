@@ -1,0 +1,50 @@
+﻿<Window x:Class="ComparisonExpressionVisualizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ComparisonExpressionVisualizer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="1472.688">
+    <Grid>
+        <TreeView Name="expressionTreeView" 
+                  HorizontalAlignment="Left" 
+                  Margin="10,0,0,10.4" 
+                  Width="685" 
+                  Background="White"/>
+        
+        <TextBox  Name="whereClauseTextBox" 
+                  HorizontalAlignment="Left" 
+                  Height="107" 
+                  Margin="700,10,0,0" 
+                  TextWrapping="Wrap" 
+                  Text="TextBox" 
+                  VerticalAlignment="Top" 
+                  Width="547"/>
+        
+        <TextBox  Name="recordTextBox" 
+                  HorizontalAlignment="Left" 
+                  Height="146" 
+                  Margin="700,122,0,0" 
+                  TextWrapping="Wrap" 
+                  Text="TextBox" 
+                  VerticalAlignment="Top" 
+                  Width="547"/>
+        
+        <DataGrid Name="recordKeyValueTable" 
+                  Background="LightBlue"
+                  HorizontalAlignment="Left" 
+                  Height="302" 
+                  Margin="1252,10,-0.6,0" 
+                  VerticalAlignment="Top" 
+                  Width="215"/>
+        
+        <Button   Name="drawTreeButton" 
+                  Content="View Tree" 
+                  HorizontalAlignment="Left" 
+                  Margin="854,290,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="75" Click="drawTreeButton_Click"/>
+
+    </Grid>
+</Window>

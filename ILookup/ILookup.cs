@@ -1,15 +1,11 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 namespace Lookup
 {    
+    [InheritedExport(typeof(ILookup))]
     public interface ILookup
     {
-        string GetValue(string columnName);
-    }
-
-    [InheritedExport(typeof(ILookupFactory))]
-    public interface ILookupFactory
-    {
-        ILookup GetLookup(string str);
+        IDictionary<string, string> GetDictionaryFrom(string record);
     }
 }

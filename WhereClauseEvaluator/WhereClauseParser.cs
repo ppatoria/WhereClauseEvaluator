@@ -25,14 +25,25 @@ namespace SqlParser
         }
     }
 
+    public static class CollectionExtension
+    {
+        public static TV GetValue<TK, TV>(this IDictionary<TK,TV> dict, TK key)
+        {
+            if(dict.TryGetValue(key, out TV value))
+                return value;
+            throw new KeyNotFoundException($"Key [{key}] not found in the record.");
+        }
+    }
+
     public class WhereClauseParser
     {
         private BooleanExpression expression_;
         DirectoryCatalog _dirCatalog;
 
-        [Import(typeof(ILookupFactory), AllowRecomposition = true)]
-        private ILookupFactory _lookupFactory;
+        [Import(typeof(ILookup), AllowRecomposition = true)]
+        private ILookup _lookup;
 
+        public IDictionary<string,string> RecordDictionary { get; private set; }
 
         private void Compose()
         {
@@ -63,22 +74,24 @@ namespace SqlParser
         ///       Else if implemetation is not provided in the directory use overloaded ToExpression(ILookup) method.
         /// </summary>
         /// <returns></returns>
-        public Expression ToExpression(string recordForLookup)
+        public Expression ToExpression(string record)
         {
             Compose();
-            if (_lookupFactory == null)
+            if (_lookup == null)
             {
                 throw new InvalidOperationException(
                     $@"ILookup is null.\n 
                         Either provide the implementation of ILookup and place in the Plugin directory under working directory \n
                         or \n
-                        use overloaded ToExpression(ILookup) method instead and pass the required ILoopup implementation");
+                        use overloaded ToExpression(ILookup) method instead and pass the required ILookup implementation");
             }
-            var lookupImpl = _lookupFactory.GetLookup(recordForLookup);
-            return ToExpression(lookupImpl);
+            RecordDictionary = _lookup.GetDictionaryFrom(record);
+            return ToExpression(RecordDictionary);
         }
 
-        public Expression ToExpression<T>(T lookup) where T : ILookup
+
+
+        public Expression ToExpression(IDictionary<string,string> lookup) 
         {
             return ToExpression(expression_);
 

@@ -6,17 +6,18 @@ using System.Linq.Expressions;
 using System;
 using ExpressionParser;
 using Lookup;
+using System.Collections.Generic;
 
 namespace WhereClauseEvaluatorTests
 {
     [TestFixture]
     public class WhereClauseEvaluatorTests
     {
-        private Mock<ILookup> _mockRecord;
+        private Mock<IDictionary<string,string>> _mockRecord;
         [SetUp]
         public void Init()
         {
-            _mockRecord = new Mock<ILookup>();
+            _mockRecord = new Mock<IDictionary<string,string>>();
             _mockRecord.Setup(r => r.GetValue("c")).Returns("0");
             _mockRecord.Setup(r => r.GetValue("c1")).Returns("1");
             _mockRecord.Setup(r => r.GetValue("c2")).Returns("2");

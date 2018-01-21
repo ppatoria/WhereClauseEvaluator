@@ -144,7 +144,7 @@ namespace BinaryTree
     {
         public static void Main()
         {
-            Mock<ILookup> mockRecord = new Mock<ILookup>();
+            var mockRecord = new Mock<IDictionary<string,string>>();
             mockRecord.Setup(r => r.GetValue("c")).Returns("0");
             mockRecord.Setup(r => r.GetValue("c1")).Returns("1");
             mockRecord.Setup(r => r.GetValue("c2")).Returns("2");
