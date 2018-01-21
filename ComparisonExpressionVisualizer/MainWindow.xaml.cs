@@ -20,6 +20,8 @@ namespace ComparisonExpressionVisualizer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ComparisionExpression _comparisionExpression;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,18 +31,28 @@ namespace ComparisonExpressionVisualizer
         {
             try
             {
-                var comparisionExpression = new ComparisionExpression(
+                    _comparisionExpression = new ComparisionExpression(
                     whereClauseTextBox.Text.Trim(), 
                     recordTextBox.Text.Trim());
 
-                comparisionExpression.Draw(expressionTreeView);
+                _comparisionExpression.Draw(expressionTreeView);
 
-                recordKeyValueTable.ItemsSource = comparisionExpression.RecordDictionary; 
+                recordKeyValueTable.ItemsSource = _comparisionExpression.ObservableRecordDictionary; 
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void UpdateRecordButton_Click(object sender, RoutedEventArgs e)
+        {
+            var updatedRecord = string.Join(
+                " ",
+                _comparisionExpression
+                    .ObservableRecordDictionary
+                    .Select(kv => $"{kv.Key}={kv.Value}"));
+            recordTextBox.Text = updatedRecord;
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ComparisonExpressionVisualizer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="1472.688">
+        Title="MainWindow" Height="350" Width="1473">
     <Grid>
         <TreeView Name="expressionTreeView" 
                   HorizontalAlignment="Left" 
@@ -47,12 +47,12 @@
                   VerticalAlignment="Top" 
                   Width="75" Click="drawTreeButton_Click"/>
         
-        <Button   Name="CopyKeyValButton" 
-                  Content="Copy to Clipboard" 
+        <Button   Name="UpdateRecordButton" 
+                  Content="Update" 
                   HorizontalAlignment="Left" 
-                  Margin="1319,275,0,0" 
+                  Margin="1319,279,-2.6,0" 
                   VerticalAlignment="Top" 
-                  Width="150"/>
+                  Width="150" Click="UpdateRecordButton_Click"/>
         
         <Button   Name="CopyTreeViewButton" 
                   Content="Copy to clipboard" 

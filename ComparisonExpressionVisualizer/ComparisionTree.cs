@@ -14,15 +14,19 @@ namespace ComparisonExpressionVisualizer
 {
     public  class ComparisionExpression
     {
+        public ObservableDictionary<string, string> ObservableRecordDictionary { get; }
+
         IList<object> _prefix = null;
-        public IDictionary<string,string> RecordDictionary { get; }
+
         public ComparisionExpression(string whereClause,string record)
         {
             var parser = new WhereClauseParser(whereClause);
             var expr = parser.ToExpression(record);
             _prefix = new ExpressionParser.ExpressionParser(expr).PrefixExpression.ToList();
-            RecordDictionary = parser.RecordDictionary;
+            ObservableRecordDictionary = new ObservableDictionary<string, string>(
+                parser.RecordDictionary);
         }
+
         private void SetColor(Node node, bool? result)
         {
             if (result == null)
@@ -32,7 +36,6 @@ namespace ComparisonExpressionVisualizer
             if (result.Value)
             {
                 node.Background = Brushes.LightGreen;
-
             }
             else
             {
