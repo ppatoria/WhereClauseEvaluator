@@ -19,8 +19,8 @@
 
         <TextBox  Name="whereClauseTextBox" 
                   HorizontalAlignment="Left" 
-                  Height="107" 
-                  Margin="700,10,0,0" 
+                  Height="65" 
+                  Margin="700,52,0,0" 
                   TextWrapping="Wrap" 
                   Text="TextBox" 
                   VerticalAlignment="Top" 
@@ -28,8 +28,8 @@
 
         <TextBox  Name="recordTextBox" 
                   HorizontalAlignment="Left" 
-                  Height="146" 
-                  Margin="700,122,0,0" 
+                  Height="88" 
+                  Margin="700,180,0,0" 
                   TextWrapping="Wrap" 
                   Text="TextBox" 
                   VerticalAlignment="Top" 
@@ -64,6 +64,21 @@
                   Margin="356,287,0,0" 
                   VerticalAlignment="Top" 
                   Width="150"/>
+        <ListBox  Name ="whereClauseHistoryList" 
+                  Grid.ColumnSpan="2" 
+                  HorizontalAlignment="Left" 
+                  Height="37" 
+                  Margin="748,10,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="473"/>
+        <ListBox  Name="recordHistoryList"  
+                  Grid.ColumnSpan="2" 
+                  HorizontalAlignment="Left" 
+                  Height="39" 
+                  Margin="729,136,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="492" 
+                  RenderTransformOrigin="0.5,0.5"/>
 
     </Grid>
 </Window>

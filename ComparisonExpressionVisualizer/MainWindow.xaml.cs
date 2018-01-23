@@ -26,9 +26,28 @@ namespace ComparisonExpressionVisualizer
         public MainWindow()
         {
             InitializeComponent();
+
             Closing += MainWindow_Closing;
-            whereClauseTextBox.Text = _whereClauseTextHistory.Load(whereClauseTextBox.Name)?.LastOrDefault();
-            recordTextBox.Text = _recordTextHistory.Load(recordTextBox.Name)?.LastOrDefault();
+            whereClauseHistoryList.SelectionChanged += WhereClauseHistoryList_SelectionChanged;
+            recordHistoryList.SelectionChanged += RecordHistoryList_SelectionChanged;
+
+            var whereClauseHistory = _whereClauseTextHistory.Load(whereClauseTextBox.Name);
+            whereClauseTextBox.Text = whereClauseHistory?.LastOrDefault();
+            whereClauseHistoryList.ItemsSource = whereClauseHistory;
+
+            var recordHistory = _recordTextHistory.Load(recordTextBox.Name);
+            recordTextBox.Text = recordHistory?.LastOrDefault();
+            recordHistoryList.ItemsSource = recordHistory;
+        }
+
+        private void RecordHistoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            recordTextBox.Text = e.AddedItems[0].ToString();
+        }
+
+        private void WhereClauseHistoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+           whereClauseTextBox.Text = e.AddedItems[0].ToString();
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

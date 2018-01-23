@@ -16,12 +16,19 @@ namespace ComparisonExpressionVisualizer
         private IList<T> _history = new List<T>();
         public IList<T> Load(string name)
         {
-            if (string.IsNullOrEmpty(name) || File.Exists(name) == false)
+            if (string.IsNullOrEmpty(name) || File.Exists($"{name}.dat") == false)
                 return default(List<T>);
 
-            using (var stream = File.OpenRead(name))
+            using (var stream = File.OpenRead($"{name}.dat"))
             {
-                _history = (List<T>)new XmlSerializer(typeof(List<T>)).Deserialize(stream);
+                try
+                {
+                    _history = (List<T>)new XmlSerializer(typeof(List<T>)).Deserialize(stream);
+                }
+                catch(Exception ex)
+                {
+                    throw new Exception("Error while serialization of history data. Please delete dat files from bin directory.");
+                }
             }
             return _history;
         }
@@ -29,7 +36,8 @@ namespace ComparisonExpressionVisualizer
         public void Save(string name, T obj)
         {
             _history.Add(obj);
-            using (var stream = File.OpenWrite(name))
+            _history = _history.Distinct().ToList();
+            using (var stream = File.OpenWrite($"{name}.dat"))
             {
                 new XmlSerializer(typeof(List<T>)).Serialize(stream, _history);
             }
