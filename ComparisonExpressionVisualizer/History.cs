@@ -11,25 +11,27 @@ using System.Xml.Serialization;
 namespace ComparisonExpressionVisualizer
 {
 
-    public static class History<T>
+    public class History<T>
     {
-        
-        public static T Load(string name)
+        private IList<T> _history = new List<T>();
+        public IList<T> Load(string name)
         {
             if (string.IsNullOrEmpty(name) || File.Exists(name) == false)
-                return default(T);
+                return default(List<T>);
 
             using (var stream = File.OpenRead(name))
             {
-                return (T)new XmlSerializer(typeof(T)).Deserialize(stream);
+                _history = (List<T>)new XmlSerializer(typeof(List<T>)).Deserialize(stream);
             }
+            return _history;
         }
 
-        public static void Save(string name, T obj)
+        public void Save(string name, T obj)
         {
+            _history.Add(obj);
             using (var stream = File.OpenWrite(name))
             {
-                new XmlSerializer(typeof(T)).Serialize(stream, obj);
+                new XmlSerializer(typeof(List<T>)).Serialize(stream, _history);
             }
         }
     }

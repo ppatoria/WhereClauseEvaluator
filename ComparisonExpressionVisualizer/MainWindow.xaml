@@ -7,12 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="1473">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="787*"/>
+            <ColumnDefinition Width="679*"/>
+        </Grid.ColumnDefinitions>
         <TreeView Name="expressionTreeView" 
                   HorizontalAlignment="Left" 
                   Margin="10,0,0,54.4" 
                   Width="685" 
                   Background="White"/>
-        
+
         <TextBox  Name="whereClauseTextBox" 
                   HorizontalAlignment="Left" 
                   Height="107" 
@@ -20,8 +24,8 @@
                   TextWrapping="Wrap" 
                   Text="TextBox" 
                   VerticalAlignment="Top" 
-                  Width="547"/>
-        
+                  Width="547" Grid.ColumnSpan="2"/>
+
         <TextBox  Name="recordTextBox" 
                   HorizontalAlignment="Left" 
                   Height="146" 
@@ -29,31 +33,31 @@
                   TextWrapping="Wrap" 
                   Text="TextBox" 
                   VerticalAlignment="Top" 
-                  Width="547"/>
-        
+                  Width="547" Grid.ColumnSpan="2"/>
+
         <DataGrid Name="recordKeyValueTable" 
                   Background="LightBlue"
                   HorizontalAlignment="Left" 
                   Height="231" 
-                  Margin="1252,10,-0.6,0" 
+                  Margin="464.683,10,-0.6,0" 
                   VerticalAlignment="Top" 
                   Width="215"
-                  IsReadOnly="False"/>
-        
+                  IsReadOnly="False" Grid.Column="1"/>
+
         <Button   Name="drawTreeButton" 
                   Content="View Tree" 
                   HorizontalAlignment="Left" 
-                  Margin="854,290,0,0" 
+                  Margin="66.683,290,0,0" 
                   VerticalAlignment="Top" 
-                  Width="75" Click="drawTreeButton_Click"/>
-        
+                  Width="75" Click="drawTreeButton_Click" Grid.Column="1"/>
+
         <Button   Name="UpdateRecordButton" 
                   Content="Update" 
                   HorizontalAlignment="Left" 
-                  Margin="1319,279,-2.6,0" 
+                  Margin="531.683,279,-2.6,0" 
                   VerticalAlignment="Top" 
-                  Width="150" Click="UpdateRecordButton_Click"/>
-        
+                  Width="150" Click="UpdateRecordButton_Click" Grid.Column="1"/>
+
         <Button   Name="CopyTreeViewButton" 
                   Content="Copy to clipboard" 
                   HorizontalAlignment="Left" 

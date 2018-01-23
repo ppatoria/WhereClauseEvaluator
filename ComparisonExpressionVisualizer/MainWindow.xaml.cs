@@ -21,19 +21,20 @@ namespace ComparisonExpressionVisualizer
     public partial class MainWindow : Window
     {        
         private ComparisionExpression _comparisionExpression;
-
+        private History<string> _whereClauseTextHistory = new History<string>();
+        private History<string> _recordTextHistory = new History<string>();
         public MainWindow()
         {
             InitializeComponent();
             Closing += MainWindow_Closing;
-            whereClauseTextBox.Text = History<string>.Load(whereClauseTextBox.Name);
-            recordTextBox.Text = History<string>.Load(recordTextBox.Name);
+            whereClauseTextBox.Text = _whereClauseTextHistory.Load(whereClauseTextBox.Name)?.LastOrDefault();
+            recordTextBox.Text = _recordTextHistory.Load(recordTextBox.Name)?.LastOrDefault();
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            History<string>.Save(whereClauseTextBox.Name, whereClauseTextBox.Text);
-            History<string>.Save(recordTextBox.Name, recordTextBox.Text);            
+            _whereClauseTextHistory.Save(whereClauseTextBox.Name, whereClauseTextBox.Text);
+            _recordTextHistory.Save(recordTextBox.Name, recordTextBox.Text);            
         }
 
         private void drawTreeButton_Click(object sender, RoutedEventArgs e)
