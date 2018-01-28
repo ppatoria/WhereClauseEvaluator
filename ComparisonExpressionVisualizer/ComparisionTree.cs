@@ -27,6 +27,14 @@ namespace ComparisonExpressionVisualizer
                 parser.RecordDictionary);
         }
 
+        public override string ToString()
+        {
+            return _prefix
+                .ToList()
+                .ToTree()
+                .AsString();
+        }
+
         private void SetColor(Node node, bool? result)
         {
             if (result == null)

@@ -63,7 +63,9 @@
                   HorizontalAlignment="Left" 
                   Margin="356,287,0,0" 
                   VerticalAlignment="Top" 
-                  Width="150"/>
+                  Width="150"
+                  Click="CopyTreeViewButton_Click"/>
+        
         <ListBox  Name ="whereClauseHistoryList" 
                   Grid.ColumnSpan="2" 
                   HorizontalAlignment="Left" 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -83,6 +84,14 @@ namespace ComparisonExpressionVisualizer
                     .Select(kv => $"{kv.Key}={kv.Value}"));
 
             recordTextBox.Text = updatedRecord;
+        }
+
+        private void CopyTreeViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            Thread thread = new Thread(() => Clipboard.SetText(_comparisionExpression.ToString()));
+            thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
+            thread.Start();
+            thread.Join();
         }
     }
 }
