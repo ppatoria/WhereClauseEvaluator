@@ -6,80 +6,109 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ComparisonExpressionVisualizer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="1473">
+        Title="MainWindow" Height="auto" Width="auto">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="787*"/>
-            <ColumnDefinition Width="679*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TreeView Name="expressionTreeView" 
-                  HorizontalAlignment="Left" 
-                  Margin="10,0,0,54.4" 
-                  Width="685" 
-                  Background="White"/>
 
-        <avalonEdit:TextEditor  Name="whereClauseTextBox" 
-                  HorizontalAlignment="Left" 
-                  Height="65" 
-                  Margin="700,52,0,0" 
-                  Text="TextBox" 
-                  VerticalAlignment="Top" 
-                  Width="547" Grid.ColumnSpan="2"/>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
 
-        <avalonEdit:TextEditor Name="recordTextBox" 
-                  HorizontalAlignment="Left" 
-                  Height="88" 
-                  Margin="700,180,0,0" 
-                  Text="TextBox" 
-                  VerticalAlignment="Top" 
-                  Width="547" Grid.ColumnSpan="2"/>
-
-        <DataGrid Name="recordKeyValueTable" 
-                  Background="LightBlue"
-                  HorizontalAlignment="Left" 
-                  Height="231" 
-                  Margin="464.683,10,-0.6,0" 
-                  VerticalAlignment="Top" 
-                  Width="215"
-                  IsReadOnly="False" Grid.Column="1"/>
-
-        <Button   Name="drawTreeButton" 
-                  Content="View Tree" 
-                  HorizontalAlignment="Left" 
-                  Margin="66.683,290,0,0" 
-                  VerticalAlignment="Top" 
-                  Width="75" Click="drawTreeButton_Click" Grid.Column="1"/>
-
-        <Button   Name="UpdateRecordButton" 
-                  Content="Update" 
-                  HorizontalAlignment="Left" 
-                  Margin="531.683,279,-2.6,0" 
-                  VerticalAlignment="Top" 
-                  Width="150" Click="UpdateRecordButton_Click" Grid.Column="1"/>
-
-        <Button   Name="CopyTreeViewButton" 
-                  Content="Copy to clipboard" 
-                  HorizontalAlignment="Left" 
-                  Margin="356,287,0,0" 
-                  VerticalAlignment="Top" 
+            <TreeView Grid.Row="0" 
+                  Name="expressionTreeView" 
+                  HorizontalAlignment="Left"
+                  BorderBrush="White"/>
+            
+            <Button  Grid.Row="1" Name="CopyTreeViewButton" 
+                  Content="Copy" 
+                  HorizontalAlignment="Left"                                      
                   Width="150"
-                  Click="CopyTreeViewButton_Click"/>
-        
-        <ListBox  Name ="whereClauseHistoryList" 
-                  Grid.ColumnSpan="2" 
-                  HorizontalAlignment="Left" 
-                  Height="37" 
-                  Margin="748,10,0,0" 
-                  VerticalAlignment="Top" 
-                  Width="473"/>
-        <ListBox  Name="recordHistoryList"  
-                  Grid.ColumnSpan="2" 
-                  HorizontalAlignment="Left" 
-                  Height="39" 
-                  Margin="729,136,0,0" 
-                  VerticalAlignment="Top" 
-                  Width="492" 
+                  Click="CopyTreeViewButton_Click" 
+                  Height="26.6" 
                   RenderTransformOrigin="0.5,0.5"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListBox  Grid.Row="0" 
+                  Name ="whereClauseHistoryList" 
+                  Grid.ColumnSpan="2" 
+                  HorizontalAlignment="Left"                                     
+                  VerticalAlignment="Top" />
+                <avalonEdit:TextEditor Grid.Row="1" 
+                  Name="whereClauseTextBox" 
+                  HorizontalAlignment="Left"                                      
+                  Text="TextBox" 
+                  VerticalAlignment="Top" />
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListBox  Grid.Row="0"
+                  Name="recordHistoryList"  
+                  Grid.ColumnSpan="2" 
+                  HorizontalAlignment="Left"                                     
+                  VerticalAlignment="Top"                   
+                  RenderTransformOrigin="0.5,0.5"/>
+                <avalonEdit:TextEditor Grid.Row="1"
+                  Name="recordTextBox" 
+                  HorizontalAlignment="Left"                           
+                  Text="TextBox" 
+                  VerticalAlignment="Top" />
+            </Grid>
+            <Grid Grid.Row="2">
+                <Button   Name="drawTreeButton" 
+                  Content="View Tree" 
+                  HorizontalAlignment="Left"                   
+                  VerticalAlignment="Top"                   
+                  Click="drawTreeButton_Click" 
+                  Grid.Column="1"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <DataGrid Grid.Row="0"
+                  Name="recordKeyValueTable"                   
+                  HorizontalAlignment="Left" 
+                  Height="231"                   
+                  VerticalAlignment="Top"                   
+                  IsReadOnly="False"
+                  BorderBrush="White"/>
+
+            <Button Grid.Row="1"   
+                  Name="UpdateRecordButton" 
+                  Content="Update" 
+                  HorizontalAlignment="Left"                   
+                  VerticalAlignment="Top" 
+                  Width="150" 
+                  Click="UpdateRecordButton_Click"/>
+        </Grid>
+
+
+
+
+
+
+
 
     </Grid>
 </Window>
