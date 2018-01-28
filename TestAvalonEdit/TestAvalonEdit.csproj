@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1831F4D8-280D-4042-87D5-B1DD7214AE81}</ProjectGuid>
+    <ProjectGuid>{3FB60060-1D3F-4DFD-9962-6CE25CDC00F2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ComparisonExpressionVisualizer</RootNamespace>
-    <AssemblyName>ComparisonExpressionVisualizer</AssemblyName>
+    <RootNamespace>TestAvalonEdit</RootNamespace>
+    <AssemblyName>TestAvalonEdit</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -65,15 +65,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ComparisionTree.cs" />
-    <Compile Include="History.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -99,16 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExpressionParser\ExpressionParser.csproj">
-      <Project>{47B6487C-8693-46DA-AC0C-F0400C35E067}</Project>
-      <Name>ExpressionParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WhereClauseEvaluator\WhereClauseParser.csproj">
-      <Project>{3BA8739F-D038-4F9C-B993-4F79CE4CA0FD}</Project>
-      <Name>WhereClauseParser</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

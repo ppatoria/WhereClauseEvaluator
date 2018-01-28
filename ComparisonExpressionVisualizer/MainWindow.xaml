@@ -1,6 +1,7 @@
 ﻿<Window x:Class="ComparisonExpressionVisualizer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"	
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ComparisonExpressionVisualizer"
@@ -17,20 +18,18 @@
                   Width="685" 
                   Background="White"/>
 
-        <TextBox  Name="whereClauseTextBox" 
+        <avalonEdit:TextEditor  Name="whereClauseTextBox" 
                   HorizontalAlignment="Left" 
                   Height="65" 
                   Margin="700,52,0,0" 
-                  TextWrapping="Wrap" 
                   Text="TextBox" 
                   VerticalAlignment="Top" 
                   Width="547" Grid.ColumnSpan="2"/>
 
-        <TextBox  Name="recordTextBox" 
+        <avalonEdit:TextEditor Name="recordTextBox" 
                   HorizontalAlignment="Left" 
                   Height="88" 
                   Margin="700,180,0,0" 
-                  TextWrapping="Wrap" 
                   Text="TextBox" 
                   VerticalAlignment="Top" 
                   Width="547" Grid.ColumnSpan="2"/>
