@@ -16,91 +16,129 @@
 
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="90*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
             </Grid.RowDefinitions>
-
-            <TreeView Grid.Row="0" 
-                  Name="expressionTreeView" 
-                  HorizontalAlignment="Left"
-                  BorderBrush="White"/>
+            <TextBlock  Text="Comparision Expresssion Tree" 
+                        FontFamily="Comic Sans MS"
+                        FontSize="20"
+                        FontStyle="Normal"                        
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Stretch"/>
             
-            <Button  Grid.Row="1" Name="CopyTreeViewButton" 
-                  Content="Copy" 
-                  HorizontalAlignment="Left"                                      
-                  Width="150"
-                  Click="CopyTreeViewButton_Click" 
-                  Height="26.6" 
-                  RenderTransformOrigin="0.5,0.5"/>
+            <TreeView   Grid.Row="1" 
+                        Name="expressionTreeView" 
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" FontFamily="Comic Sans MS" FontSize="16"/>
+            
+            <Button     Grid.Row="2" 
+                        Name="CopyTreeViewButton" 
+                        Content="Copy" 
+                        Click="CopyTreeViewButton_Click" 
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        RenderTransformOrigin="0.5,0.5" FontFamily="Comic Sans MS" FontSize="16"/>
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="43*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="42*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <ListBox  Grid.Row="0" 
-                  Name ="whereClauseHistoryList" 
-                  Grid.ColumnSpan="2" 
-                  HorizontalAlignment="Left"                                     
-                  VerticalAlignment="Top" />
-                <avalonEdit:TextEditor Grid.Row="1" 
-                  Name="whereClauseTextBox" 
-                  HorizontalAlignment="Left"                                      
-                  Text="TextBox" 
-                  VerticalAlignment="Top" />
-            </Grid>
+            <TextBlock Text="Where Clause" 
+                       FontFamily="Comic Sans MS"
+                       FontSize="20"
+                       FontStyle="Normal"
+                       Grid.Row="0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Stretch"/>
+            
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="8*"></RowDefinition>
+                    <RowDefinition Height="92*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <ListBox  Grid.Row="0"
+                
+                <ComboBox  Grid.Row="0" 
+                           Background="White"
+                  Name ="whereClauseHistoryList" 
+                  Text="WhereClause History"
+                  HorizontalAlignment="Stretch"                                     
+                  VerticalAlignment="Stretch"/>
+
+                <avalonEdit:TextEditor 
+                    Grid.Row="1" 
+                  Name="whereClauseTextBox" 
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch" FontFamily="Consolas" FontSize="14"/>
+                
+            </Grid>
+            <TextBlock Text="Data" Grid.Row="2"
+                                               FontSize="20"
+                        FontStyle="Normal"
+                      FontFamily="Comic Sans MS"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Stretch"/>
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*"></RowDefinition>
+                    <RowDefinition Height="92*"></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <ComboBox  Grid.Row="0"
+                           Background="White"
+                           
                   Name="recordHistoryList"  
-                  Grid.ColumnSpan="2" 
-                  HorizontalAlignment="Left"                                     
-                  VerticalAlignment="Top"                   
+                  Text="Data History"
+                  HorizontalAlignment="Stretch"                                     
+                  VerticalAlignment="Stretch"                   
                   RenderTransformOrigin="0.5,0.5"/>
+                
                 <avalonEdit:TextEditor Grid.Row="1"
                   Name="recordTextBox" 
-                  HorizontalAlignment="Left"                           
-                  Text="TextBox" 
-                  VerticalAlignment="Top" />
+                  HorizontalAlignment="Stretch"                                             
+                  VerticalAlignment="Stretch" FontFamily="Consolas" />
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="4">
                 <Button   Name="drawTreeButton" 
                   Content="View Tree" 
-                  HorizontalAlignment="Left"                   
-                  VerticalAlignment="Top"                   
-                  Click="drawTreeButton_Click" 
-                  Grid.Column="1"/>
+                  HorizontalAlignment="Stretch"                   
+                  VerticalAlignment="Stretch"                   
+                  Click="drawTreeButton_Click"                   
+                  Grid.Column="1" FontFamily="Comic Sans MS" FontSize="16"/>
             </Grid>
         </Grid>
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="2" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="90*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
             </Grid.RowDefinitions>
-            <DataGrid Grid.Row="0"
+            <TextBlock Text="Lookup Dictionary" Grid.Row="0"
+                       
+                       FontFamily="Comic Sans MS"
+                                                   FontSize="20"
+                        FontStyle="Normal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Stretch"/>
+            <DataGrid Grid.Row="1"
                   Name="recordKeyValueTable"                   
-                  HorizontalAlignment="Left" 
-                  Height="231"                   
-                  VerticalAlignment="Top"                   
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch"                   
                   IsReadOnly="False"
-                  BorderBrush="White"/>
+                  Background="White"
+                  BorderBrush="White" FontFamily="Consolas" FontSize="14"/>
 
-            <Button Grid.Row="1"   
+            <Button Grid.Row="2"   
                   Name="UpdateRecordButton" 
                   Content="Update" 
-                  HorizontalAlignment="Left"                   
-                  VerticalAlignment="Top" 
-                  Width="150" 
-                  Click="UpdateRecordButton_Click"/>
+                  HorizontalAlignment="Stretch"   
+                    VerticalAlignment="Stretch"
+                  Click="UpdateRecordButton_Click" FontFamily="Comic Sans MS" FontSize="16"/>
         </Grid>
 
 

@@ -61,7 +61,7 @@ namespace SqlParser
                 .ParseBooleanExpression(new StringReader(whereClause), out IList<ParseError>  errors);
             if(errors != null && errors.Any())
             {
-                throw new Exception($"Error {errors} while parsing");
+                throw new InvalidWhereClauseException($"Invalid WhereClause. \n\nFailed while parsing with error [{errors}].");
             }
         }
         private bool Evaluate(Expression expr)

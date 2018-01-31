@@ -33,17 +33,15 @@ namespace ComparisonExpressionVisualizer
             recordHistoryList.SelectionChanged += RecordHistoryList_SelectionChanged;
 
             var whereClauseHistory = _whereClauseTextHistory.Load(whereClauseTextBox.Name);
-            whereClauseTextBox.Text = whereClauseHistory?.LastOrDefault();
             whereClauseHistoryList.ItemsSource = whereClauseHistory;
-
+            
             var recordHistory = _recordTextHistory.Load(recordTextBox.Name);
-            recordTextBox.Text = recordHistory?.LastOrDefault();
             recordHistoryList.ItemsSource = recordHistory;
         }
 
         private void RecordHistoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            recordTextBox.Text = e.AddedItems[0].ToString();
+                recordTextBox.Text = e.AddedItems[0].ToString();
         }
 
         private void WhereClauseHistoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -71,7 +69,7 @@ namespace ComparisonExpressionVisualizer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -88,10 +86,13 @@ namespace ComparisonExpressionVisualizer
 
         private void CopyTreeViewButton_Click(object sender, RoutedEventArgs e)
         {
-            Thread thread = new Thread(() => Clipboard.SetText(_comparisionExpression.ToString()));
-            thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
-            thread.Start();
-            thread.Join();
+            if (_comparisionExpression != null)
+            {
+                Thread thread = new Thread(() => Clipboard.SetText(_comparisionExpression.ToString()));
+                thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
+                thread.Start();
+                thread.Join();
+            }
         }
     }
 }
