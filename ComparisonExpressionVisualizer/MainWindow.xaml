@@ -28,9 +28,13 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Stretch"/>
             
-            <TreeView   Grid.Row="1" 
-                        Name="expressionTreeView" 
+            <TreeView   
+                
+                Grid.Row="1" 
+                        Name="expressionTreeView"
+                        
                         HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Right"
                         VerticalAlignment="Stretch" FontFamily="Comic Sans MS" FontSize="16"/>
             
             <Button     Grid.Row="2" 
