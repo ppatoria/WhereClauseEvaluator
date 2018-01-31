@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ICSharpCode.AvalonEdit.CodeCompletion;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,10 +25,16 @@ namespace ComparisonExpressionVisualizer
         private ComparisionExpression _comparisionExpression;
         private History<string> _whereClauseTextHistory = new History<string>();
         private History<string> _recordTextHistory = new History<string>();
+        CompletionWindow _completionWindow;
         public MainWindow()
         {
             InitializeComponent();
 
+            whereClauseTextBox.TextArea.TextEntering += WhereClause_TextEntering;
+            whereClauseTextBox.TextArea.TextEntered += WhereClause_TextEntered;
+
+            recordTextBox.TextArea.TextEntering += Record_TextEntering;
+            recordTextBox.TextArea.TextEntered += Record_TextEntered;
             Closing += MainWindow_Closing;
             whereClauseHistoryList.SelectionChanged += WhereClauseHistoryList_SelectionChanged;
             recordHistoryList.SelectionChanged += RecordHistoryList_SelectionChanged;
@@ -37,6 +44,59 @@ namespace ComparisonExpressionVisualizer
             
             var recordHistory = _recordTextHistory.Load(recordTextBox.Name);
             recordHistoryList.ItemsSource = recordHistory;
+        }
+
+        private void Record_TextEntered(object sender, TextCompositionEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Record_TextEntering(object sender, TextCompositionEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddCompletionListWithKeys()
+        {
+            foreach (var key in _comparisionExpression.ObservableRecordDictionary.Keys)
+            {
+                _completionWindow.CompletionList.CompletionData.Add(new CompletionData(key));
+            }
+        }
+        private void AddCompletionListWithValues()
+        {
+            foreach (var value in _comparisionExpression.ObservableRecordDictionary.Values)
+            {
+                _completionWindow.CompletionList.CompletionData.Add(new CompletionData(value));
+            }
+        }
+
+        private void WhereClause_TextEntered(object sender, TextCompositionEventArgs e)
+        {
+            if (e.Text == " ")
+            {
+                // open code completion after the user has pressed dot:
+                _completionWindow = new CompletionWindow(whereClauseTextBox.TextArea);
+                // provide AvalonEdit with the data:
+                AddCompletionListWithKeys();
+                _completionWindow.Show();
+                _completionWindow.Closed += delegate {
+                    _completionWindow = null;
+                };
+            }
+        }
+
+        private void WhereClause_TextEntering(object sender, TextCompositionEventArgs e)
+        {
+            if (e.Text.Length > 0 && _completionWindow != null)
+            {
+                if (!char.IsLetterOrDigit(e.Text[0]))
+                {
+                    // Whenever a non-letter is typed while the completion window is open,
+                    // insert the currently selected element.
+                    _completionWindow.CompletionList.RequestInsertion(e);
+                }
+            }
         }
 
         private void RecordHistoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -38,6 +38,9 @@ namespace ComparisonExpressionVisualizer
         {
             Add(new Pair<TKey, TValue>(key, value));
         }
+
+        public IList<TValue> Values => Items.Select(i => i.Value).ToList();
+        public IList<TKey> Keys => Items.Select(i => i.Key).ToList();
     }
 
     public class Pair<TKey, TValue> : INotifyPropertyChanged
