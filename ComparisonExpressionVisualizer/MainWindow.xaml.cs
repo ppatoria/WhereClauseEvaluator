@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +18,18 @@ using System.Windows.Shapes;
 
 namespace ComparisonExpressionVisualizer
 {
+
+    public static class CompletionListExtension
+    {
+        public static void AddCompletionData(this CompletionList completionList, IList<string> values)
+        {
+            foreach (var completionData in values.Select(v => new CompletionData(v)))
+            {
+                completionList.CompletionData.Add(completionData);
+            }
+        }
+
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -56,34 +69,31 @@ namespace ComparisonExpressionVisualizer
             throw new NotImplementedException();
         }
 
-        private void AddCompletionListWithKeys()
-        {
-            foreach (var key in _comparisionExpression.ObservableRecordDictionary.Keys)
-            {
-                _completionWindow.CompletionList.CompletionData.Add(new CompletionData(key));
-            }
-        }
-        private void AddCompletionListWithValues()
-        {
-            foreach (var value in _comparisionExpression.ObservableRecordDictionary.Values)
-            {
-                _completionWindow.CompletionList.CompletionData.Add(new CompletionData(value));
-            }
-        }
+       
+
 
         private void WhereClause_TextEntered(object sender, TextCompositionEventArgs e)
         {
+            _completionWindow = new CompletionWindow(whereClauseTextBox.TextArea);
+            // show keys
             if (e.Text == " ")
             {
-                // open code completion after the user has pressed dot:
-                _completionWindow = new CompletionWindow(whereClauseTextBox.TextArea);
-                // provide AvalonEdit with the data:
-                AddCompletionListWithKeys();
-                _completionWindow.Show();
-                _completionWindow.Closed += delegate {
-                    _completionWindow = null;
-                };
+                // ends with = or < or > or in(   => show values
+                if (Regex.IsMatch(e.Text.TrimEnd(), @".*([=<>])|(.*in\s*\()"))
+                {
+                    _completionWindow
+                        .CompletionList
+                        .AddCompletionData(_comparisionExpression.ObservableRecordDictionary.Values);
+                }
+                else
+                {
+                    _completionWindow
+                        .CompletionList
+                        .AddCompletionData(_comparisionExpression.ObservableRecordDictionary.Keys);
+                }
             }
+            _completionWindow.Show();
+            _completionWindow.Closed += delegate { _completionWindow = null; };
         }
 
         private void WhereClause_TextEntering(object sender, TextCompositionEventArgs e)
