@@ -61,12 +61,10 @@ namespace ComparisonExpressionVisualizer
 
         private void Record_TextEntered(object sender, TextCompositionEventArgs e)
         {
-            throw new NotImplementedException();
         }
 
         private void Record_TextEntering(object sender, TextCompositionEventArgs e)
         {
-            throw new NotImplementedException();
         }
 
        
@@ -75,11 +73,24 @@ namespace ComparisonExpressionVisualizer
         private void WhereClause_TextEntered(object sender, TextCompositionEventArgs e)
         {
             _completionWindow = new CompletionWindow(whereClauseTextBox.TextArea);
+
+            if(whereClauseHistoryList.Text.Trim().Length <= 0)
+            {
+                    _completionWindow
+                        .CompletionList
+                        .AddCompletionData(_comparisionExpression.ObservableRecordDictionary.Keys);
+
+            }
             // show keys
             if (e.Text == " ")
             {
-                // ends with = or < or > or in(   => show values
-                if (Regex.IsMatch(e.Text.TrimEnd(), @".*([=<>])|(.*in\s*\()"))
+                /**
+                 * If ends with 
+                 * = or < or > or in(   
+                 * show values
+                 */
+                 
+                if(Regex.IsMatch(whereClauseTextBox.Text.TrimEnd(), @"$(?<=([=<>])|(in\s*\())"))
                 {
                     _completionWindow
                         .CompletionList

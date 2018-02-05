@@ -69,16 +69,17 @@
                 
                 <ComboBox  Grid.Row="0" 
                            Background="White"
-                  Name ="whereClauseHistoryList" 
-                  Text="WhereClause History"
+                  Name ="whereClauseHistoryList"                   
                   HorizontalAlignment="Stretch"                                     
                   VerticalAlignment="Stretch"/>
 
                 <avalonEdit:TextEditor 
-                    Grid.Row="1" 
+                  Grid.Row="1" 
                   Name="whereClauseTextBox" 
                   HorizontalAlignment="Stretch" 
-                  VerticalAlignment="Stretch" FontFamily="Consolas" FontSize="14"/>
+                  VerticalAlignment="Stretch" 
+                  FontFamily="Consolas" 
+                  FontSize="14"/>
                 
             </Grid>
             <TextBlock Text="Data" Grid.Row="2"
