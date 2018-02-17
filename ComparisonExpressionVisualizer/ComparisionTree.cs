@@ -111,6 +111,6 @@ namespace ComparisonExpressionVisualizer
 
             tree.Items.Add(root);
         }
-       
+
     }
 }

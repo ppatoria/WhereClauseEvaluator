@@ -8,91 +8,111 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="auto" Width="auto">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="97*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Name="MenuSection">
+            <DockPanel>
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="_Preferences" Name="PreferencesMenu">
+                        <MenuItem Name="AlwayCollapseTree"  
+                                  Header="_AlwaysCollapseTree" 
+                                  IsCheckable="True"
+                                  IsChecked="False"
+                                  Checked="AlwayCollapseTree_Checked"
+                                  Unchecked="AlwayCollapseTree_Unchecked"/>
+                    </MenuItem>
+                </Menu>
+                <TextBox AcceptsReturn="True" />
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Name="ComparisionTreeSection">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="90*"></RowDefinition>
-                <RowDefinition Height="5*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <TextBlock  Text="Comparision Expresssion Tree" 
+            <Grid Grid.Column="0" Name="ComparisionTreeSection">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"></RowDefinition>
+                    <RowDefinition Height="90*"></RowDefinition>
+                    <RowDefinition Height="5*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock  Text="Comparision Expresssion Tree" 
                         FontFamily="Comic Sans MS"
                         FontSize="20"
                         FontStyle="Normal"                        
                         Grid.Row="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Stretch"/>
-            
-            <TreeView   
+
+                <TreeView   
                 Grid.Row="1" 
                         Name="expressionTreeView"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Right"
                         VerticalAlignment="Stretch" FontFamily="Comic Sans MS" FontSize="16"/>
-            
-            <Button     Grid.Row="2" 
+
+                <Button     Grid.Row="2" 
                         Name="CopyTreeViewButton" 
                         Content="Copy" 
                         Click="CopyTreeViewButton_Click" 
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         RenderTransformOrigin="0.5,0.5" FontFamily="Comic Sans MS" FontSize="16"/>
-        </Grid>
-        <Grid Grid.Column="1" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="43*"></RowDefinition>
-                <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="42*"></RowDefinition>
-                <RowDefinition Height="5*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <TextBlock Text="Where Clause" 
+            </Grid>
+            <Grid Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"></RowDefinition>
+                    <RowDefinition Height="43*"></RowDefinition>
+                    <RowDefinition Height="5*"></RowDefinition>
+                    <RowDefinition Height="42*"></RowDefinition>
+                    <RowDefinition Height="5*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Where Clause" 
                        FontFamily="Comic Sans MS"
                        FontSize="20"
                        FontStyle="Normal"
                        Grid.Row="0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Stretch"/>
-            
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8*"></RowDefinition>
-                    <RowDefinition Height="92*"></RowDefinition>
-                </Grid.RowDefinitions>
-                
-                <ComboBox  Grid.Row="0" 
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8*"></RowDefinition>
+                        <RowDefinition Height="92*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <ComboBox  Grid.Row="0" 
                            Background="White"
                   Name ="whereClauseHistoryList"                   
                   HorizontalAlignment="Stretch"                                     
                   VerticalAlignment="Stretch"/>
 
-                <avalonEdit:TextEditor 
+                    <avalonEdit:TextEditor 
                   Grid.Row="1" 
                   Name="whereClauseTextBox" 
                   HorizontalAlignment="Stretch" 
                   VerticalAlignment="Stretch" 
                   FontFamily="Consolas" 
                   FontSize="14"/>
-                
-            </Grid>
-            <TextBlock Text="Data" Grid.Row="2"
+
+                </Grid>
+                <TextBlock Text="Data" Grid.Row="2"
                                                FontSize="20"
                         FontStyle="Normal"
                       FontFamily="Comic Sans MS"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Stretch"/>
-            <Grid Grid.Row="3">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8*"></RowDefinition>
-                    <RowDefinition Height="92*"></RowDefinition>
-                </Grid.RowDefinitions>
-                
-                <ComboBox  Grid.Row="0"
+                <Grid Grid.Row="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8*"></RowDefinition>
+                        <RowDefinition Height="92*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <ComboBox  Grid.Row="0"
                            Background="White"
                            
                   Name="recordHistoryList"  
@@ -100,35 +120,35 @@
                   HorizontalAlignment="Stretch"                                     
                   VerticalAlignment="Stretch"                   
                   RenderTransformOrigin="0.5,0.5"/>
-                
-                <avalonEdit:TextEditor Grid.Row="1"
+
+                    <avalonEdit:TextEditor Grid.Row="1"
                   Name="recordTextBox" 
                   HorizontalAlignment="Stretch"                                             
                   VerticalAlignment="Stretch" FontFamily="Consolas" />
-            </Grid>
-            <Grid Grid.Row="4">
-                <Button   Name="drawTreeButton" 
+                </Grid>
+                <Grid Grid.Row="4">
+                    <Button   Name="drawTreeButton" 
                   Content="View Tree" 
                   HorizontalAlignment="Stretch"                   
                   VerticalAlignment="Stretch"                   
                   Click="drawTreeButton_Click"                   
                   Grid.Column="1" FontFamily="Comic Sans MS" FontSize="16"/>
+                </Grid>
             </Grid>
-        </Grid>
-        <Grid Grid.Column="2" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="90*"></RowDefinition>
-                <RowDefinition Height="5*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <TextBlock Text="Lookup Dictionary" Grid.Row="0"
+            <Grid Grid.Column="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"></RowDefinition>
+                    <RowDefinition Height="90*"></RowDefinition>
+                    <RowDefinition Height="5*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Lookup Dictionary" Grid.Row="0"
                        
                        FontFamily="Comic Sans MS"
                                                    FontSize="20"
                         FontStyle="Normal"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Stretch"/>
-            <DataGrid Grid.Row="1"
+                <DataGrid Grid.Row="1"
                   Name="recordKeyValueTable"                   
                   HorizontalAlignment="Stretch" 
                   VerticalAlignment="Stretch"                   
@@ -136,20 +156,13 @@
                   Background="White"
                   BorderBrush="White" FontFamily="Consolas" FontSize="14"/>
 
-            <Button Grid.Row="2"   
+                <Button Grid.Row="2"   
                   Name="UpdateRecordButton" 
                   Content="Update" 
                   HorizontalAlignment="Stretch"   
                     VerticalAlignment="Stretch"
                   Click="UpdateRecordButton_Click" FontFamily="Comic Sans MS" FontSize="16"/>
+            </Grid>
         </Grid>
-
-
-
-
-
-
-
-
     </Grid>
 </Window>

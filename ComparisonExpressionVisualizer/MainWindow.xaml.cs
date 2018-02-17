@@ -36,9 +36,13 @@ namespace ComparisonExpressionVisualizer
     public partial class MainWindow : Window
     {        
         private ComparisionExpression _comparisionExpression;
+
         private History<string> _whereClauseTextHistory = new History<string>();
         private History<string> _recordTextHistory = new History<string>();
+
         CompletionWindow _completionWindow;
+
+        Preferences _preferences;
         public MainWindow()
         {
             InitializeComponent();
@@ -57,6 +61,8 @@ namespace ComparisonExpressionVisualizer
             
             var recordHistory = _recordTextHistory.Load(recordTextBox.Name);
             recordHistoryList.ItemsSource = recordHistory;
+
+            _preferences = PreferencesSerializer.Deserialize();
         }
 
         private void Record_TextEntered(object sender, TextCompositionEventArgs e)
@@ -74,7 +80,9 @@ namespace ComparisonExpressionVisualizer
         {
             _completionWindow = new CompletionWindow(whereClauseTextBox.TextArea);
 
-            if(whereClauseHistoryList.Text.Trim().Length <= 0)
+            if(whereClauseHistoryList.Text.Trim().Length <= 0 
+                && _comparisionExpression != null 
+                && _comparisionExpression.ObservableRecordDictionary != null)
             {
                     _completionWindow
                         .CompletionList
@@ -133,7 +141,8 @@ namespace ComparisonExpressionVisualizer
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             _whereClauseTextHistory.Save(whereClauseTextBox.Name, whereClauseTextBox.Text);
-            _recordTextHistory.Save(recordTextBox.Name, recordTextBox.Text);            
+            _recordTextHistory.Save(recordTextBox.Name, recordTextBox.Text);
+            PreferencesSerializer.Serialize(_preferences);
         }
 
         private void drawTreeButton_Click(object sender, RoutedEventArgs e)
@@ -143,8 +152,7 @@ namespace ComparisonExpressionVisualizer
                 _comparisionExpression = new ComparisionExpression(
                 whereClauseTextBox.Text.Trim(),
                 recordTextBox.Text.Trim());
-
-                _comparisionExpression.Draw(expressionTreeView);
+                _comparisionExpression.Draw(expressionTreeView, _preferences.ExpandAll);
 
                 recordKeyValueTable.ItemsSource = _comparisionExpression.ObservableRecordDictionary;
             }
@@ -174,6 +182,19 @@ namespace ComparisonExpressionVisualizer
                 thread.Start();
                 thread.Join();
             }
+        }
+
+        private void AlwayCollapseTree_Checked(object sender, RoutedEventArgs e)
+        {
+            if(_preferences != null)
+                _preferences.ExpandAll = false;
+        }
+
+        private void AlwayCollapseTree_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if(_preferences != null)
+                _preferences.ExpandAll = true;
+
         }
     }
 }
