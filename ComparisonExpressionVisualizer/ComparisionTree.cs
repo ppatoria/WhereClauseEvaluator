@@ -51,7 +51,7 @@ namespace ComparisonExpressionVisualizer
             }
         }
 
-        public void Draw( TreeView tree)
+        public void Draw( TreeView tree, bool isExpanded = true)
         {
             var prefixReverse =  _prefix.Reverse().ToList();
             var stack = new Stack<Node>(prefixReverse.Count);
@@ -64,7 +64,7 @@ namespace ComparisonExpressionVisualizer
                     Node childNode2 = stack.Pop();
 
                     var op = (BinaryOperator)node;
-                    newNode = new Node() { Header = op.Data };
+                    newNode = new Node() { Header = op.Data, IsExpanded = isExpanded };
                     newNode.Items.Add(childNode1);
                     newNode.Items.Add(childNode2);
                     SetColor(newNode, op.Result);
@@ -74,7 +74,7 @@ namespace ComparisonExpressionVisualizer
                 {
                     var op = (UnaryOperator)node;
                     Node childNode = stack.Pop();
-                    newNode = new Node() { Header = op.Data };
+                    newNode = new Node() { Header = op.Data, IsExpanded = isExpanded };
                     newNode.Items.Add(childNode);
                     SetColor(newNode, op.Result);
                     stack.Push(newNode);
@@ -84,20 +84,20 @@ namespace ComparisonExpressionVisualizer
                     if (node is ColumnOperand)
                     {
                         var operand = (ColumnOperand)node;
-                        newNode = new Node() { Header = $"{operand.Data.Key}[{operand.Data.Value}]" };
+                        newNode = new Node() { Header = $"{operand.Data.Key}[{operand.Data.Value}]", IsExpanded = true};
                         stack.Push(newNode);
                     }
                     if (node is ConstantOperand)
                     {
                         var operand = (ConstantOperand)node;
-                        newNode = new Node() { Header = operand.Data };
+                        newNode = new Node() { Header = operand.Data , IsExpanded = isExpanded};
                         stack.Push(newNode);
 
                     }
                     if (node is ConstantOperandOfList)
                     {
                         var operand = (ConstantOperandOfList)node;
-                        newNode = new Node() { Header = $"({string.Join(",", operand.Data)})" };
+                        newNode = new Node() { Header = $"({string.Join(",", operand.Data)})" , IsExpanded = isExpanded};
                         stack.Push(newNode);
                     }
                 }
