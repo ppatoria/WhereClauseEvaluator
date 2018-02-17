@@ -76,6 +76,12 @@ namespace SqlParser
         public Expression ToExpression(string record)
         {
             Compose();
+            RecordDictionary =  GetDictionaryFrom(record);
+            return ToExpression(RecordDictionary);
+        }
+
+        public IDictionary<string,string> GetDictionaryFrom(string record)
+        {
             if (_lookup == null)
             {
                 throw new InvalidOperationException(
@@ -84,10 +90,8 @@ namespace SqlParser
                         or \n
                         use overloaded ToExpression(ILookup) method instead and pass the required ILookup implementation");
             }
-            RecordDictionary = _lookup.GetDictionaryFrom(record);
-            return ToExpression(RecordDictionary);
+             return _lookup.GetDictionaryFrom(record);
         }
-
 
 
         public Expression ToExpression(IDictionary<string,string> lookup) 
