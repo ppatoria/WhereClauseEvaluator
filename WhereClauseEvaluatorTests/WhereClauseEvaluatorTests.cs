@@ -14,6 +14,7 @@ namespace WhereClauseEvaluatorTests
     public class WhereClauseEvaluatorTests
     {
         private Mock<IDictionary<string,string>> _mockRecord;
+
         [SetUp]
         public void Init()
         {
@@ -51,7 +52,6 @@ namespace WhereClauseEvaluatorTests
             expressionParser.PrefixExpression.ForEach(e => Debug.WriteLine(e));
             Assert.That(expressionParser.PrefixExpression.Count, Is.GreaterThan(0));
         }
-
     }
 
 }
