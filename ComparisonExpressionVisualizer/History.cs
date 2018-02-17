@@ -10,7 +10,6 @@ using System.Xml.Serialization;
 
 namespace ComparisonExpressionVisualizer
 {
-
     public class History<T>
     {
         private IList<T> _history = new List<T>();
