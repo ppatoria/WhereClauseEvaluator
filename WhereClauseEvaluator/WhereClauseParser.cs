@@ -47,8 +47,7 @@ namespace SqlParser
 
         private void Compose()
         {
-            //var path = $@"{Directory.GetCurrentDirectory()}\Plugin";
-            var path = @"C:\Users\prashubh\Documents\Visual Studio 2017\Projects\WhereClauseEvaluator\SampleLookup\bin\Debug\Plugin";
+            var path = $@"{Directory.GetCurrentDirectory()}\Plugin";
              _dirCatalog = new DirectoryCatalog(path);
             CompositionContainer container = new CompositionContainer(_dirCatalog);
             container.SatisfyImportsOnce(this);
@@ -56,7 +55,7 @@ namespace SqlParser
         }
 
         public WhereClauseParser(string whereClause)
-        {            
+        {           
             expression_ = new TSql100Parser(false)
                 .ParseBooleanExpression(new StringReader(whereClause), out IList<ParseError>  errors);
             if(errors != null && errors.Any())
